@@ -114,13 +114,12 @@
     width: max-content;
     gap: 24px;
     padding: 0 24px;
-    animation: scroll 42s linear infinite;
+    cursor: grab;
+    touch-action: pan-y;
+    user-select: none;
+    will-change: transform;
   }
-  .marquee-track:hover { animation-play-state: paused; }
-  @keyframes scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
+  .marquee-track.dragging { cursor: grabbing; }
   .card {
     width: 280px;
     flex: 0 0 auto;
@@ -134,7 +133,7 @@
     text-align: left;
   }
   .card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(26,26,46,0.14); }
-  .card img { width: 100%; height: 190px; object-fit: cover; display: block; }
+  .card img { width: 100%; height: 190px; object-fit: cover; display: block; -webkit-user-drag: none; pointer-events: none; }
   .card-body { padding: 16px 18px 20px; }
   .card-body h3 { margin: 0 0 6px; font-size: 18px; font-weight: 700; }
   .card-body .price-hint { color: var(--accent-dark); font-weight: 700; font-size: 14px; }
@@ -575,6 +574,61 @@
   }
   renderCards();
 
+  // Marquee: auto-scrolls, pauses on hover, and can be dragged/swiped with mouse or finger
+  let mqOffset = 0;
+  let mqHalfWidth = 0;
+  let mqHovering = false;
+  let mqDragging = false;
+  let mqDragMoved = 0;
+  let mqStartX = 0;
+  let mqStartOffset = 0;
+  let mqLastTime = null;
+  const MQ_SPEED = 0.045; // px per ms
+
+  function mqUpdateWidth() {
+    mqHalfWidth = track.scrollWidth / 2; // list is duplicated, half = one full loop
+  }
+  function mqWrap(v) {
+    if (mqHalfWidth <= 0) return v;
+    return ((v % mqHalfWidth) + mqHalfWidth) % mqHalfWidth;
+  }
+  function mqTick(time) {
+    if (mqLastTime === null) mqLastTime = time;
+    const dt = time - mqLastTime;
+    mqLastTime = time;
+    if (!mqDragging && !mqHovering) {
+      mqOffset = mqWrap(mqOffset + MQ_SPEED * dt);
+    }
+    track.style.transform = `translateX(${-mqOffset}px)`;
+    requestAnimationFrame(mqTick);
+  }
+  mqUpdateWidth();
+  requestAnimationFrame(mqTick);
+  window.addEventListener('resize', mqUpdateWidth);
+
+  track.addEventListener('pointerdown', (e) => {
+    mqDragging = true;
+    mqDragMoved = 0;
+    mqStartX = e.clientX;
+    mqStartOffset = mqOffset;
+    track.classList.add('dragging');
+    track.setPointerCapture(e.pointerId);
+  });
+  track.addEventListener('pointermove', (e) => {
+    if (!mqDragging) return;
+    const dx = e.clientX - mqStartX;
+    mqDragMoved = Math.max(mqDragMoved, Math.abs(dx));
+    mqOffset = mqWrap(mqStartOffset - dx);
+  });
+  function mqEndDrag() {
+    mqDragging = false;
+    track.classList.remove('dragging');
+  }
+  track.addEventListener('pointerup', mqEndDrag);
+  track.addEventListener('pointercancel', mqEndDrag);
+  track.addEventListener('mouseenter', () => { mqHovering = true; });
+  track.addEventListener('mouseleave', () => { mqHovering = false; });
+
   // Modal
   const overlay = document.getElementById('modalOverlay');
   const modalImg = document.getElementById('modalImg');
@@ -604,6 +658,7 @@
     lenis.start();
   }
   track.addEventListener('click', (e) => {
+    if (mqDragMoved > 6) { mqDragMoved = 0; return; } // was a swipe/drag, not a tap
     const card = e.target.closest('.card');
     if (card) openModal(card.dataset.key);
   });
@@ -611,13 +666,21 @@
   overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
-  // Cookie banner
+  // Cookie banner (sets a real cookie, not just localStorage)
+  function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+  }
+  function getCookie(name) {
+    return document.cookie.split('; ').find((row) => row.startsWith(name + '='));
+  }
   const cookieBanner = document.getElementById('cookie-banner');
-  if (!localStorage.getItem('mazay_cookie_ok')) {
+  if (!getCookie('mazay_cookie_consent')) {
     setTimeout(() => cookieBanner.classList.add('show'), 800);
   }
   document.getElementById('cookieAccept').addEventListener('click', () => {
-    localStorage.setItem('mazay_cookie_ok', '1');
+    setCookie('mazay_cookie_consent', '1', 180);
     cookieBanner.classList.remove('show');
   });
 </script>
