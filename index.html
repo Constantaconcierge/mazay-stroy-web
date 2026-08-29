@@ -383,9 +383,8 @@
 <script>
   // Lenis smooth scroll
   const lenis = new Lenis({
-    duration: 0.7,
+    duration: 0.9,
     smoothWheel: true,
-    wheelMultiplier: 1.15,
     prevent: (node) => node.closest && !!node.closest('[data-lenis-prevent]'),
   });
   function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
@@ -606,26 +605,30 @@
   requestAnimationFrame(mqTick);
   window.addEventListener('resize', mqUpdateWidth);
 
+  function mqOnPointerMove(e) {
+    if (!mqDragging) return;
+    const dx = e.clientX - mqStartX;
+    mqDragMoved = Math.max(mqDragMoved, Math.abs(dx));
+    mqOffset = mqWrap(mqStartOffset - dx);
+  }
+  function mqOnPointerUp() {
+    mqDragging = false;
+    track.classList.remove('dragging');
+    window.removeEventListener('pointermove', mqOnPointerMove);
+    window.removeEventListener('pointerup', mqOnPointerUp);
+    window.removeEventListener('pointercancel', mqOnPointerUp);
+  }
   track.addEventListener('pointerdown', (e) => {
+    if (e.button !== undefined && e.button !== 0) return; // left click / touch / pen only
     mqDragging = true;
     mqDragMoved = 0;
     mqStartX = e.clientX;
     mqStartOffset = mqOffset;
     track.classList.add('dragging');
-    track.setPointerCapture(e.pointerId);
+    window.addEventListener('pointermove', mqOnPointerMove);
+    window.addEventListener('pointerup', mqOnPointerUp);
+    window.addEventListener('pointercancel', mqOnPointerUp);
   });
-  track.addEventListener('pointermove', (e) => {
-    if (!mqDragging) return;
-    const dx = e.clientX - mqStartX;
-    mqDragMoved = Math.max(mqDragMoved, Math.abs(dx));
-    mqOffset = mqWrap(mqStartOffset - dx);
-  });
-  function mqEndDrag() {
-    mqDragging = false;
-    track.classList.remove('dragging');
-  }
-  track.addEventListener('pointerup', mqEndDrag);
-  track.addEventListener('pointercancel', mqEndDrag);
   track.addEventListener('mouseenter', () => { mqHovering = true; });
   track.addEventListener('mouseleave', () => { mqHovering = false; });
 
