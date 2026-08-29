@@ -194,6 +194,45 @@
   .process-step h3 { margin: 0 0 8px; font-size: 16px; font-weight: 700; }
   .process-step p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.55; }
 
+  /* Quote / manifesto */
+  .quote-section {
+    position: relative;
+    padding: clamp(72px, 14vw, 140px) clamp(20px, 5vw, 64px);
+    background: var(--ink);
+    /* TODO: when the client photo arrives, add background-image (cover, centered)
+       plus a dark gradient overlay so the text below stays readable. */
+    background-image: radial-gradient(circle at 30% 20%, rgba(242,162,39,0.16), transparent 55%),
+                       radial-gradient(circle at 80% 85%, rgba(242,162,39,0.10), transparent 50%);
+    overflow: hidden;
+    text-align: center;
+  }
+  .quote-mark {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(60px, 12vw, 120px);
+    font-weight: 800;
+    color: var(--accent);
+    opacity: 0.35;
+    line-height: 1;
+    margin: 0 0 -0.2em;
+  }
+  .quote-text {
+    color: #fff;
+    font-size: clamp(30px, 6vw, 58px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    margin: 0 auto;
+    max-width: 780px;
+    line-height: 1.15;
+  }
+  .quote-brand {
+    margin: 22px 0 0;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
   /* Modal */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(26,26,46,0.55);
@@ -384,6 +423,12 @@
       <p>Оплата за фактически отработанные машиносмены.</p>
     </div>
   </div>
+</section>
+
+<section class="quote-section" id="quoteSection">
+  <p class="quote-mark">&ldquo;</p>
+  <h2 class="quote-text">Мы строим жизнь</h2>
+  <p class="quote-brand">Mazay Stroy</p>
 </section>
 
 <div class="modal-overlay" id="modalOverlay" data-lenis-prevent>
