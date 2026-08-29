@@ -237,6 +237,49 @@
   .faq-q { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
   .faq-a { color: var(--ink-soft); font-size: 14px; line-height: 1.6; margin: 0; }
 
+  .modal-cta {
+    display: block; width: 100%; margin-top: 30px;
+    background: var(--accent); color: var(--ink); border: none; border-radius: 14px;
+    padding: 15px 20px; font-weight: 800; font-size: 15px; cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+  }
+  .modal-cta:hover { background: var(--accent-dark); color: #fff; }
+
+  /* Floating lead button */
+  .fab-lead {
+    position: fixed; right: 20px; bottom: 20px; z-index: 90;
+    background: var(--ink); color: #fff; border: none; border-radius: 999px;
+    padding: 15px 22px; font-weight: 800; font-size: 14px; cursor: pointer;
+    box-shadow: 0 14px 34px rgba(26,26,46,0.35);
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Manrope', sans-serif;
+  }
+  .fab-lead:hover { background: #26263f; }
+  .fab-lead .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* Lead form */
+  .lead-field { margin-bottom: 16px; }
+  .lead-field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
+  .lead-field input, .lead-field textarea {
+    width: 100%; border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; font-family: 'Inter', sans-serif; font-size: 15px;
+    color: var(--ink); background: var(--bg); resize: vertical;
+  }
+  .lead-field input:focus, .lead-field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .lead-honeypot { position: absolute; left: -9999px; opacity: 0; height: 0; }
+  .lead-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin: 4px 0 20px; }
+  .lead-consent input { margin-top: 3px; flex-shrink: 0; }
+  .lead-submit {
+    width: 100%; background: var(--accent); color: var(--ink); border: none; border-radius: 14px;
+    padding: 15px 20px; font-weight: 800; font-size: 15px; cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+  }
+  .lead-submit:hover { background: var(--accent-dark); color: #fff; }
+  .lead-submit:disabled { opacity: 0.6; cursor: default; }
+  .lead-status { margin-top: 14px; font-size: 14px; text-align: center; min-height: 20px; }
+  .lead-status.ok { color: #2e8b57; font-weight: 600; }
+  .lead-status.err { color: #c0392b; font-weight: 600; }
+
   /* Footer */
   footer {
     border-top: 1px solid var(--border);
@@ -363,6 +406,44 @@
 
       <p class="modal-section-title">Вопросы и ответы</p>
       <div id="modalFaq"></div>
+
+      <button class="modal-cta" id="modalLeadBtn">Оставить заявку на эту технику</button>
+    </div>
+  </div>
+</div>
+
+<button class="fab-lead" id="fabLead"><span class="dot"></span>Оставить заявку</button>
+
+<div class="modal-overlay" id="leadOverlay" data-lenis-prevent>
+  <div class="modal" style="max-width: 460px;">
+    <div class="modal-body">
+      <div class="modal-header">
+        <h2>Оставить заявку</h2>
+        <button class="modal-close" id="leadClose" aria-label="Закрыть">✕</button>
+      </div>
+      <p class="modal-desc">Оставьте телефон — свяжемся и согласуем технику, сроки и объект.</p>
+
+      <form id="leadForm">
+        <div class="lead-field">
+          <label for="leadPhone">Телефон *</label>
+          <input type="tel" id="leadPhone" name="phone" placeholder="+7 900 000-00-00" required>
+        </div>
+        <div class="lead-field">
+          <label for="leadService">Какая техника нужна</label>
+          <input type="text" id="leadService" name="service" placeholder="Например, экскаватор">
+        </div>
+        <div class="lead-field">
+          <label for="leadMessage">Комментарий</label>
+          <textarea id="leadMessage" name="message" rows="3" placeholder="Объект, сроки, детали работ"></textarea>
+        </div>
+        <input class="lead-honeypot" type="text" name="website" tabindex="-1" autocomplete="off">
+        <label class="lead-consent">
+          <input type="checkbox" required>
+          <span>Согласен(на) на обработку персональных данных для связи по заявке.</span>
+        </label>
+        <button type="submit" class="lead-submit" id="leadSubmit">Отправить заявку</button>
+        <div class="lead-status" id="leadStatus"></div>
+      </form>
     </div>
   </div>
 </div>
@@ -640,9 +721,11 @@
   const modalModels = document.getElementById('modalModels');
   const modalFaq = document.getElementById('modalFaq');
 
+  let currentCategoryTitle = '';
   function openModal(key) {
     const c = categories.find(x => x.key === key);
     if (!c) return;
+    currentCategoryTitle = c.title;
     modalImg.src = c.img;
     modalImg.alt = c.title;
     modalTitle.textContent = c.title;
@@ -667,7 +750,73 @@
   });
   document.getElementById('modalClose').addEventListener('click', closeModal);
   overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (leadOverlay.classList.contains('open')) closeLeadModal();
+    else closeModal();
+  });
+
+  // Lead form (sends to the Telegram leads bot)
+  const LEAD_ENDPOINT = 'https://telegram-leads-bot.vercel.app/api/lead';
+  const leadOverlay = document.getElementById('leadOverlay');
+  const leadForm = document.getElementById('leadForm');
+  const leadService = document.getElementById('leadService');
+  const leadStatus = document.getElementById('leadStatus');
+  const leadSubmit = document.getElementById('leadSubmit');
+
+  function openLeadModal(prefill) {
+    leadStatus.textContent = '';
+    leadStatus.className = 'lead-status';
+    leadService.value = prefill || '';
+    leadOverlay.classList.add('open');
+    lenis.stop();
+    document.getElementById('leadPhone').focus();
+  }
+  function closeLeadModal() {
+    leadOverlay.classList.remove('open');
+    lenis.start();
+  }
+  document.getElementById('fabLead').addEventListener('click', () => openLeadModal(''));
+  document.getElementById('modalLeadBtn').addEventListener('click', () => {
+    closeModal();
+    openLeadModal(currentCategoryTitle);
+  });
+  document.getElementById('leadClose').addEventListener('click', closeLeadModal);
+  leadOverlay.addEventListener('click', (e) => { if (e.target === leadOverlay) closeLeadModal(); });
+
+  leadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(leadForm);
+    leadSubmit.disabled = true;
+    leadStatus.className = 'lead-status';
+    leadStatus.textContent = 'Отправляем…';
+    try {
+      const res = await fetch(LEAD_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: data.get('phone'),
+          service: data.get('service'),
+          message: data.get('message'),
+          website: data.get('website'),
+          site: 'mazay-stroy-web',
+        }),
+      });
+      if (res.ok) {
+        leadStatus.textContent = 'Заявка отправлена! Скоро свяжемся.';
+        leadStatus.className = 'lead-status ok';
+        leadForm.reset();
+        setTimeout(closeLeadModal, 1800);
+      } else {
+        throw new Error('bad response');
+      }
+    } catch (err) {
+      leadStatus.textContent = 'Не удалось отправить. Попробуйте ещё раз.';
+      leadStatus.className = 'lead-status err';
+    } finally {
+      leadSubmit.disabled = false;
+    }
+  });
 
   // Cookie banner (sets a real cookie, not just localStorage)
   function setCookie(name, value, days) {
