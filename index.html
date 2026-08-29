@@ -45,8 +45,7 @@
     padding: 20px clamp(20px, 5vw, 64px);
     position: sticky;
     top: 0;
-    background: rgba(247,245,240,0.9);
-    backdrop-filter: blur(8px);
+    background: var(--bg);
     z-index: 50;
     border-bottom: 1px solid var(--border);
   }
@@ -736,6 +735,7 @@
   let mqStartX = 0;
   let mqStartOffset = 0;
   let mqLastTime = null;
+  let mqInView = true;
   const MQ_SPEED = 0.045; // px per ms
 
   function mqUpdateWidth() {
@@ -749,14 +749,23 @@
     if (mqLastTime === null) mqLastTime = time;
     const dt = time - mqLastTime;
     mqLastTime = time;
-    if (!mqDragging && !mqHovering) {
-      mqOffset = mqWrap(mqOffset + MQ_SPEED * dt);
+    // Skip work entirely while the marquee is scrolled out of view (keeps scroll smooth elsewhere on the page)
+    if (mqInView) {
+      if (!mqDragging && !mqHovering) {
+        mqOffset = mqWrap(mqOffset + MQ_SPEED * dt);
+      }
+      track.style.transform = `translateX(${-mqOffset}px)`;
     }
-    track.style.transform = `translateX(${-mqOffset}px)`;
     requestAnimationFrame(mqTick);
   }
   mqUpdateWidth();
   requestAnimationFrame(mqTick);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((entries) => {
+      mqInView = entries[0].isIntersecting;
+      if (mqInView) mqLastTime = null; // avoid a big dt jump after being hidden
+    }, { threshold: 0 }).observe(track);
+  }
   window.addEventListener('resize', mqUpdateWidth);
 
   function mqOnPointerMove(e) {
