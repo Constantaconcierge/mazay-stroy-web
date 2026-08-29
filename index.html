@@ -46,6 +46,7 @@
     border-bottom: 1px solid var(--border);
   }
   .logo-group { display: flex; align-items: center; gap: 14px; }
+  .logo-slot { width: 52px; height: 52px; flex: 0 0 auto; }
   .logo-video {
     width: 52px;
     height: 52px;
@@ -53,6 +54,7 @@
     object-fit: cover;
     background: #17172a;
     box-shadow: var(--shadow);
+    display: block;
   }
   .brand { font-weight: 800; font-size: 20px; letter-spacing: 0.5px; line-height: 1; }
   .brand span { display: block; }
@@ -65,6 +67,23 @@
     padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 64px) clamp(32px, 6vw, 56px);
     text-align: center;
   }
+  .intro-logo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    height: clamp(120px, 20vw, 200px);
+  }
+  .intro-logo {
+    width: clamp(120px, 20vw, 200px);
+    height: clamp(120px, 20vw, 200px);
+    border-radius: 28px;
+    object-fit: cover;
+    background: #17172a;
+    box-shadow: var(--shadow);
+    opacity: 0;
+    animation: introFadeIn 0.5s ease forwards;
+  }
+  @keyframes introFadeIn { to { opacity: 1; } }
   .hero h1 {
     font-size: clamp(32px, 5vw, 52px);
     font-weight: 800;
@@ -121,11 +140,67 @@
   .card-body .price-hint { color: var(--accent-dark); font-weight: 700; font-size: 14px; }
   .card-body .count { color: var(--ink-soft); font-size: 13px; margin-top: 4px; }
 
+  /* Advantages */
+  .section {
+    padding: clamp(16px, 4vw, 32px) clamp(20px, 5vw, 64px) clamp(48px, 8vw, 96px);
+  }
+  .section-title {
+    font-size: clamp(24px, 3.5vw, 34px);
+    font-weight: 800;
+    text-align: center;
+    margin: 0 0 40px;
+  }
+  .adv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .adv-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 24px 22px;
+    box-shadow: var(--shadow);
+  }
+  .adv-card .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(242,162,39,0.15); color: var(--accent-dark);
+    font-weight: 800; font-size: 15px; margin-bottom: 14px;
+  }
+  .adv-card h3 { margin: 0 0 8px; font-size: 17px; font-weight: 700; }
+  .adv-card p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.55; }
+
+  /* Process */
+  .process-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+    counter-reset: step;
+  }
+  .process-step { text-align: center; }
+  .process-step .step-num {
+    counter-increment: step;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--ink); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px; margin: 0 auto 16px;
+  }
+  .process-step .step-num::before { content: counter(step); }
+  .process-step h3 { margin: 0 0 8px; font-size: 16px; font-weight: 700; }
+  .process-step p { margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.55; }
+
   /* Modal */
   .modal-overlay {
     position: fixed; inset: 0; background: rgba(26,26,46,0.55);
     display: none; align-items: flex-start; justify-content: center;
     padding: clamp(16px, 4vw, 48px); z-index: 100; overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .modal-overlay.open { display: flex; }
   .modal {
@@ -195,7 +270,7 @@
 
 <header>
   <div class="logo-group">
-    <video class="logo-video" autoplay muted loop playsinline></video>
+    <div class="logo-slot" id="logoSlot"></div>
     <div class="brand">
       <span>MAZAY</span>
       <span class="stroy">STROY</span>
@@ -205,6 +280,9 @@
 </header>
 
 <section class="hero">
+  <div class="intro-logo-wrap" id="introLogoWrap">
+    <video class="intro-logo" id="introLogo" autoplay muted playsinline></video>
+  </div>
   <h1>Спецтехника в аренду<br>для любых <span class="accent">объектов</span></h1>
   <p>Автокраны, экскаваторы, бульдозеры, погрузчики, самосвалы и кран-манипулятор — с оператором, по прозрачным ценам за машиносмену.</p>
   <div class="hint">Листайте технику ниже ↓</div>
@@ -214,7 +292,59 @@
   <div class="marquee-track" id="marqueeTrack"></div>
 </section>
 
-<div class="modal-overlay" id="modalOverlay">
+<section class="section">
+  <h2 class="section-title">Почему выбирают нас</h2>
+  <div class="adv-grid">
+    <div class="adv-card">
+      <div class="num">01</div>
+      <h3>Широкий парк техники</h3>
+      <p>8 категорий, больше 20 моделей — от компактных погрузчиков до 30-тонных автокранов.</p>
+    </div>
+    <div class="adv-card">
+      <div class="num">02</div>
+      <h3>Техника с оператором</h3>
+      <p>Машинист всегда включён в стоимость — доплат за работу оператора не будет.</p>
+    </div>
+    <div class="adv-card">
+      <div class="num">03</div>
+      <h3>Навесное оборудование</h3>
+      <p>Гидромолот и другое навесное — для демонтажа, мёрзлого грунта и скальных пород.</p>
+    </div>
+    <div class="adv-card">
+      <div class="num">04</div>
+      <h3>Прозрачный прайс</h3>
+      <p>Фиксированная цена за машиносмену — без скрытых наценок и доплат «по факту».</p>
+    </div>
+  </div>
+</section>
+
+<section class="section process-section">
+  <h2 class="section-title">Как проходит аренда</h2>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="step-num"></div>
+      <h3>Выбираете технику</h3>
+      <p>Смотрите категории и модели с ценами прямо на сайте.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num"></div>
+      <h3>Согласовываем детали</h3>
+      <p>Объект, сроки работ, нужное навесное оборудование.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num"></div>
+      <h3>Подгоняем технику</h3>
+      <p>С оператором, в согласованное время, на ваш объект.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num"></div>
+      <h3>Работаете по сменам</h3>
+      <p>Оплата за фактически отработанные машиносмены.</p>
+    </div>
+  </div>
+</section>
+
+<div class="modal-overlay" id="modalOverlay" data-lenis-prevent>
   <div class="modal">
     <img class="modal-img" id="modalImg" src="" alt="" />
     <div class="modal-body">
@@ -253,15 +383,55 @@
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
   // Lenis smooth scroll
-  const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+  const lenis = new Lenis({
+    duration: 0.7,
+    smoothWheel: true,
+    wheelMultiplier: 1.15,
+    prevent: (node) => node.closest && !!node.closest('[data-lenis-prevent]'),
+  });
   function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
   requestAnimationFrame(raf);
 
-  // Logo video source (mp4 + gif fallback handled by browser support)
-  const logoVideo = document.querySelector('.logo-video');
-  logoVideo.innerHTML = '<source src="images/logo-mark.mp4" type="video/mp4">';
-  logoVideo.load();
-  logoVideo.play().catch(() => {});
+  // Hero logo intro: plays large, then flies into the header logo slot
+  const introLogo = document.getElementById('introLogo');
+  introLogo.innerHTML = '<source src="images/logo-mark.mp4" type="video/mp4">';
+  introLogo.load();
+  introLogo.play().catch(() => {});
+
+  function flyLogoToHeader() {
+    const slot = document.getElementById('logoSlot');
+    if (!slot || introLogo.dataset.moved) return;
+    introLogo.dataset.moved = '1';
+
+    const oldRect = introLogo.getBoundingClientRect();
+    slot.appendChild(introLogo);
+    introLogo.classList.remove('intro-logo');
+    introLogo.classList.add('logo-video');
+    introLogo.style.opacity = '1';
+    introLogo.style.animation = 'none';
+    const newRect = introLogo.getBoundingClientRect();
+
+    const dx = oldRect.left - newRect.left;
+    const dy = oldRect.top - newRect.top;
+    const scale = oldRect.width / newRect.width;
+    introLogo.style.transformOrigin = 'top left';
+    introLogo.style.transition = 'none';
+    introLogo.style.transform = `translate(${dx}px, ${dy}px) scale(${scale})`;
+    introLogo.getBoundingClientRect(); // force reflow
+    requestAnimationFrame(() => {
+      introLogo.style.transition = 'transform 0.85s cubic-bezier(0.65,0,0.35,1)';
+      introLogo.style.transform = 'none';
+    });
+    introLogo.addEventListener('transitionend', () => {
+      introLogo.style.transition = '';
+      introLogo.style.transform = '';
+      introLogo.style.transformOrigin = '';
+      const wrap = document.getElementById('introLogoWrap');
+      if (wrap) wrap.remove();
+    }, { once: true });
+  }
+  introLogo.addEventListener('ended', flyLogoToHeader);
+  setTimeout(flyLogoToHeader, 3600); // fallback if 'ended' doesn't fire (autoplay blocked, etc.)
 
   // Equipment data
   const categories = [
