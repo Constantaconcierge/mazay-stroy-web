@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mazay Stroy — аренда спецтехники</title>
+<meta name="description" content="Аренда спецтехники: автокраны, экскаваторы, бульдозеры, погрузчики, самосвалы, кран-манипулятор. Прайс-лист и подробное описание каждой техники." />
+<link rel="icon" href="images/logo-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --ink: #1a1a2e;
+    --ink-soft: #5b5b6b;
+    --accent: #f2a227;
+    --accent-dark: #d98a12;
+    --border: #e7e2d6;
+    --shadow: 0 10px 30px rgba(26,26,46,0.08);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .brand { font-family: 'Manrope', sans-serif; }
+  a { color: inherit; }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px clamp(20px, 5vw, 64px);
+    position: sticky;
+    top: 0;
+    background: rgba(247,245,240,0.9);
+    backdrop-filter: blur(8px);
+    z-index: 50;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-group { display: flex; align-items: center; gap: 14px; }
+  .logo-video {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    object-fit: cover;
+    background: #17172a;
+    box-shadow: var(--shadow);
+  }
+  .brand { font-weight: 800; font-size: 20px; letter-spacing: 0.5px; line-height: 1; }
+  .brand span { display: block; }
+  .brand .stroy { color: var(--accent-dark); }
+  .tagline { font-size: 13px; color: var(--ink-soft); font-weight: 500; display: none; }
+  @media (min-width: 640px) { .tagline { display: block; } }
+
+  /* Hero */
+  .hero {
+    padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 64px) clamp(32px, 6vw, 56px);
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    margin: 0 0 16px;
+    line-height: 1.1;
+  }
+  .hero h1 .accent { color: var(--accent-dark); }
+  .hero p {
+    max-width: 560px;
+    margin: 0 auto;
+    color: var(--ink-soft);
+    font-size: clamp(15px, 2vw, 18px);
+    line-height: 1.6;
+  }
+  .hero .hint {
+    margin-top: 28px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* Marquee */
+  .marquee-section { padding: 20px 0 clamp(48px, 8vw, 96px); overflow: hidden; }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 24px;
+    padding: 0 24px;
+    animation: scroll 42s linear infinite;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .card {
+    width: 280px;
+    flex: 0 0 auto;
+    background: var(--surface);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    text-align: left;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(26,26,46,0.14); }
+  .card img { width: 100%; height: 190px; object-fit: cover; display: block; }
+  .card-body { padding: 16px 18px 20px; }
+  .card-body h3 { margin: 0 0 6px; font-size: 18px; font-weight: 700; }
+  .card-body .price-hint { color: var(--accent-dark); font-weight: 700; font-size: 14px; }
+  .card-body .count { color: var(--ink-soft); font-size: 13px; margin-top: 4px; }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(26,26,46,0.55);
+    display: none; align-items: flex-start; justify-content: center;
+    padding: clamp(16px, 4vw, 48px); z-index: 100; overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 24px;
+    max-width: 720px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    margin: auto;
+  }
+  .modal-img { width: 100%; height: 260px; object-fit: cover; display: block; }
+  .modal-body { padding: clamp(20px, 4vw, 36px); }
+  .modal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .modal-header h2 { margin: 0; font-size: clamp(22px, 3vw, 28px); }
+  .modal-close {
+    border: none; background: var(--bg); width: 40px; height: 40px; border-radius: 50%;
+    font-size: 20px; cursor: pointer; flex-shrink: 0; color: var(--ink);
+  }
+  .modal-desc { color: var(--ink-soft); line-height: 1.6; margin: 14px 0 26px; }
+  .modal-section-title {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+    color: var(--ink-soft); margin: 0 0 12px;
+  }
+  table.price-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+  table.price-table th, table.price-table td {
+    text-align: left; padding: 12px 10px; font-size: 14px; border-bottom: 1px solid var(--border);
+  }
+  table.price-table th { color: var(--ink-soft); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+  table.price-table td.price { font-weight: 700; color: var(--accent-dark); white-space: nowrap; }
+  table.price-table td.delivery { color: var(--ink-soft); white-space: nowrap; }
+
+  .faq-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .faq-a { color: var(--ink-soft); font-size: 14px; line-height: 1.6; margin: 0; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px clamp(20px, 5vw, 64px);
+    display: flex; flex-wrap: wrap; gap: 12px;
+    align-items: center; justify-content: space-between;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  footer .credit { max-width: 480px; }
+  footer .credit a { color: var(--ink-soft); }
+
+  /* Cookie banner */
+  #cookie-banner {
+    position: fixed; left: 16px; right: 16px; bottom: 16px;
+    max-width: 520px; margin: 0 auto;
+    background: var(--ink); color: #fff;
+    border-radius: 16px; padding: 16px 20px;
+    display: none; align-items: center; gap: 16px; flex-wrap: wrap;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    z-index: 200; font-size: 13px; line-height: 1.5;
+  }
+  #cookie-banner.show { display: flex; }
+  #cookie-banner button {
+    background: var(--accent); color: var(--ink); border: none; border-radius: 10px;
+    padding: 9px 18px; font-weight: 700; cursor: pointer; font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-group">
+    <video class="logo-video" autoplay muted loop playsinline></video>
+    <div class="brand">
+      <span>MAZAY</span>
+      <span class="stroy">STROY</span>
+    </div>
+  </div>
+  <div class="tagline">Аренда спецтехники</div>
+</header>
+
+<section class="hero">
+  <h1>Спецтехника в аренду<br>для любых <span class="accent">объектов</span></h1>
+  <p>Автокраны, экскаваторы, бульдозеры, погрузчики, самосвалы и кран-манипулятор — с оператором, по прозрачным ценам за машиносмену.</p>
+  <div class="hint">Листайте технику ниже ↓</div>
+</section>
+
+<section class="marquee-section">
+  <div class="marquee-track" id="marqueeTrack"></div>
+</section>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <img class="modal-img" id="modalImg" src="" alt="" />
+    <div class="modal-body">
+      <div class="modal-header">
+        <h2 id="modalTitle"></h2>
+        <button class="modal-close" id="modalClose" aria-label="Закрыть">✕</button>
+      </div>
+      <p class="modal-desc" id="modalDesc"></p>
+
+      <p class="modal-section-title">Прайс-лист</p>
+      <table class="price-table">
+        <thead>
+          <tr><th>Модель</th><th>Цена</th><th>Доставка</th></tr>
+        </thead>
+        <tbody id="modalModels"></tbody>
+      </table>
+
+      <p class="modal-section-title">Вопросы и ответы</p>
+      <div id="modalFaq"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="credit">
+    © 2026 Mazay Stroy. Стоимость указана за одну машиносмену (8 часов) с учётом НДС 20%.<br>
+    Фото техники: Wikimedia Commons (CC BY-SA / CC0 / Public Domain).
+  </div>
+</footer>
+
+<div id="cookie-banner">
+  <span>Сайт использует файлы cookie для корректной работы.</span>
+  <button id="cookieAccept">Хорошо</button>
+</div>
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+  // Lenis smooth scroll
+  const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+  function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+
+  // Logo video source (mp4 + gif fallback handled by browser support)
+  const logoVideo = document.querySelector('.logo-video');
+  logoVideo.innerHTML = '<source src="images/logo-mark.mp4" type="video/mp4">';
+  logoVideo.load();
+  logoVideo.play().catch(() => {});
+
+  // Equipment data
+  const categories = [
+    {
+      key: 'krany', title: 'Автокраны', img: 'images/krany.jpg',
+      desc: 'Поднимаем и монтируем тяжёлые грузы, работаем на высоте. От лёгкого КС-3577 до мощного XCMG на 30 тонн — подберём кран под вашу задачу.',
+      models: [
+        ['КС-55713-1К 25 т, стрела с гуськом 28,5 м', '26 000 ₽', '—'],
+        ['КС-3577 14 т, вылет стрелы 14 м', '21 000 ₽', '—'],
+        ['УРАЛ-5551 14 т', '20 000 ₽', '—'],
+        ['XCMG QY25K 30 т, вылет стрелы 32+8 м', '28 000 ₽', '—'],
+      ],
+      faq: [
+        ['Нужен ли машинист отдельно?', 'Нет, машинист всегда включён в стоимость аренды автокрана.'],
+        ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 20%.'],
+      ],
+    },
+    {
+      key: 'pogr-eksk', title: 'Экскаваторы-погрузчики', img: 'images/pogr-eksk.jpg',
+      desc: 'Универсальная техника 2-в-1: спереди ковш для погрузки, сзади стрела для рытья траншей и котлованов. Хорошо заходят на небольшие и городские объекты.',
+      models: [
+        ['JCB-3CX', '20 000 ₽', 'от 7 500 ₽'],
+        ['TEREX 880', '20 000 ₽', 'от 7 500 ₽'],
+        ['TEREX 880 с гидромолотом', '23 000 ₽', 'от 7 500 ₽'],
+      ],
+      faq: [
+        ['Что такое гидромолот и когда он нужен?', 'Навесное оборудование для разрушения асфальта, бетона, мёрзлого грунта и скальных пород — устанавливается вместо ковша.'],
+        ['Подходит для небольшого участка?', 'Да, за счёт компактных размеров такая техника — оптимальный выбор для городских и стеснённых объектов.'],
+      ],
+    },
+    {
+      key: 'eksk-gus', title: 'Экскаваторы гусеничные', img: 'images/eksk-gus.jpg',
+      desc: 'Тяжёлая техника для больших объёмов земляных работ — рытьё котлованов, траншей, демонтаж. Часть моделей доступна с гидромолотом.',
+      models: [
+        ['Hyundai R210 (1 куб)', '23 000 ₽', 'от 30 000 ₽'],
+        ['Hyundai R210NLC-9 (габарит, 1 куб)', '23 000 ₽', 'от 20 000 ₽'],
+        ['Hyundai R300L (1,3 м³)', '27 000 ₽', 'от 40 000 ₽'],
+        ['Hyundai R300L с гидромолотом', '30 000 ₽', 'от 40 000 ₽'],
+        ['Hyundai R260LC-9S (1,3 м³)', '26 000 ₽', 'от 40 000 ₽'],
+        ['Hyundai R260LC-9S с гидромолотом', '29 000 ₽', 'от 40 000 ₽'],
+        ['Case CX210B (габарит, 1 куб)', '23 000 ₽', 'от 20 000 ₽'],
+        ['Case CX210B NLC (1,1–1,3 м³, 2 ед.)', '23 000 ₽', '—'],
+        ['Case CX210B NLC с гидромолотом', '27 000 ₽', '—'],
+        ['JCB 220 полноповоротный (1,2 куб)', '24 000 ₽', 'от 20 000 ₽'],
+        ['JCB 180 полноповоротный (габарит)', '23 000 ₽', 'от 20 000 ₽'],
+        ['Volvo EC140B (0,8 м³)', '22 000 ₽', '—'],
+      ],
+      faq: [
+        ['Чем гусеничный экскаватор отличается от колёсного?', 'Гусеницы дают лучшую проходимость и устойчивость на грунте, но для переезда между объектами такой технике нужен трал.'],
+        ['Можно взять экскаватор с гидромолотом?', 'Да, часть моделей доступна с гидромолотом — для разрушения бетона, асфальта и мёрзлого грунта.'],
+      ],
+    },
+    {
+      key: 'eksk-koles', title: 'Экскаваторы колёсные', img: 'images/eksk-koles.jpg',
+      desc: 'Передвигаются своим ходом по дорогам общего пользования — не нужен трал. Удобны, когда технику нужно быстро перебросить между объектами.',
+      models: [
+        ['Volvo EW180C (масса 19 т, ковш 0,9 м³)', '23 000 ₽', '—'],
+        ['Volvo EW180C с гидромолотом', '27 000 ₽', '—'],
+        ['JCB JS160W (масса 17 т, ковш 0,9 м³)', '23 000 ₽', '—'],
+        ['JCB JS160W с грейферным оборудованием', '27 000 ₽', '—'],
+        ['CAT M315D (масса 17 т, ковш 0,9 м³)', '23 000 ₽', '—'],
+        ['CAT M315D с гидромолотом', '27 000 ₽', '—'],
+      ],
+      faq: [
+        ['Чем колёсный экскаватор отличается от гусеничного?', 'Передвигается своим ходом по дорогам общего пользования, не нужен трал для перевозки — быстрее перебрасывается между объектами.'],
+        ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 20%.'],
+      ],
+    },
+    {
+      key: 'buldozery', title: 'Бульдозеры', img: 'images/buldozery.jpg',
+      desc: 'Планировка площадок, расчистка участков, перемещение больших объёмов грунта.',
+      models: [
+        ['ДЗ-171 (Т-130, Т-170)', '23 000 ₽', 'от 35 000 ₽'],
+        ['Caterpillar D6', '31 000 ₽', 'от 46 000 ₽'],
+      ],
+      faq: [
+        ['Для каких задач нужен бульдозер, а не экскаватор?', 'Бульдозер эффективен для перемещения и разравнивания больших объёмов грунта по поверхности, а не для рытья вглубь.'],
+        ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 20%.'],
+      ],
+    },
+    {
+      key: 'pogruzchiki', title: 'Погрузчики', img: 'images/pogruzchiki.jpg',
+      desc: 'Компактный манёвренный погрузчик для работы на ограниченной площади — погрузка сыпучих материалов, уборка территории.',
+      models: [
+        ['BOBCAT', '20 000 ₽', 'от 20 000 ₽'],
+      ],
+      faq: [
+        ['Для каких задач подходит компактный погрузчик?', 'Уборка территории, погрузка сыпучих материалов, работа в стеснённых условиях, куда крупная техника не заедет.'],
+        ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 20%.'],
+      ],
+    },
+    {
+      key: 'samosvaly', title: 'Самосвалы', img: 'images/samosvaly.jpg',
+      desc: 'Вывоз грунта и строительного мусора, доставка сыпучих материалов на объект.',
+      models: [
+        ['Аренда самосвалов (кузов 20 м³)', '20 000 ₽', '—'],
+        ['КАМАЗ 65115 (полноприводный, 15 т, 10 м³)', '20 000 ₽', '—'],
+        ['Самосвал-вездеход УРАЛ (12 т, 12 м³)', '22 000 ₽', '—'],
+      ],
+      faq: [
+        ['Какой объём вывозит самосвал за рейс?', 'От 10 до 20 м³ в зависимости от модели — смотрите объём кузова в прайс-листе.'],
+        ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 20%.'],
+      ],
+    },
+    {
+      key: 'manipulyator', title: 'Кран-манипулятор', img: 'images/manipulyator.jpg',
+      desc: 'Перевозка и погрузка/разгрузка стройматериалов, труб, плит и оборудования одной машиной — не нужно заказывать грузовик и кран отдельно.',
+      models: [
+        ['Кран-манипулятор 7 т, стрела 3–5 т', '20 000 ₽ / 19 000 ₽', '—'],
+      ],
+      faq: [
+        ['Чем кран-манипулятор лучше обычного грузовика?', 'Одна машина одновременно перевозит и грузит/разгружает материалы — не нужно заказывать грузовик и кран по отдельности.'],
+        ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 20%.'],
+      ],
+    },
+  ];
+
+  const track = document.getElementById('marqueeTrack');
+  function renderCards() {
+    const list = [...categories, ...categories]; // duplicate for seamless loop
+    track.innerHTML = list.map((c, i) => `
+      <div class="card" data-key="${c.key}">
+        <img src="${c.img}" alt="${c.title}" loading="lazy">
+        <div class="card-body">
+          <h3>${c.title}</h3>
+          <div class="price-hint">от ${minPrice(c)} ₽/смена</div>
+          <div class="count">${c.models.length} ${plural(c.models.length)}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+  function minPrice(c) {
+    const nums = c.models.map(m => parseInt(m[1].replace(/\D/g, '').slice(0, 5)) || Infinity);
+    return Math.min(...nums).toLocaleString('ru-RU');
+  }
+  function plural(n) {
+    const f = n % 10, s = n % 100;
+    if (f === 1 && s !== 11) return 'модель';
+    if ([2,3,4].includes(f) && ![12,13,14].includes(s)) return 'модели';
+    return 'моделей';
+  }
+  renderCards();
+
+  // Modal
+  const overlay = document.getElementById('modalOverlay');
+  const modalImg = document.getElementById('modalImg');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalModels = document.getElementById('modalModels');
+  const modalFaq = document.getElementById('modalFaq');
+
+  function openModal(key) {
+    const c = categories.find(x => x.key === key);
+    if (!c) return;
+    modalImg.src = c.img;
+    modalImg.alt = c.title;
+    modalTitle.textContent = c.title;
+    modalDesc.textContent = c.desc;
+    modalModels.innerHTML = c.models.map(m => `
+      <tr><td>${m[0]}</td><td class="price">${m[1]}</td><td class="delivery">${m[2]}</td></tr>
+    `).join('');
+    modalFaq.innerHTML = c.faq.map(f => `
+      <div class="faq-item"><div class="faq-q">${f[0]}</div><p class="faq-a">${f[1]}</p></div>
+    `).join('');
+    overlay.classList.add('open');
+    lenis.stop();
+  }
+  function closeModal() {
+    overlay.classList.remove('open');
+    lenis.start();
+  }
+  track.addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if (card) openModal(card.dataset.key);
+  });
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // Cookie banner
+  const cookieBanner = document.getElementById('cookie-banner');
+  if (!localStorage.getItem('mazay_cookie_ok')) {
+    setTimeout(() => cookieBanner.classList.add('show'), 800);
+  }
+  document.getElementById('cookieAccept').addEventListener('click', () => {
+    localStorage.setItem('mazay_cookie_ok', '1');
+    cookieBanner.classList.remove('show');
+  });
+</script>
+</body>
+</html>
