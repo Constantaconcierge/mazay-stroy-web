@@ -209,7 +209,7 @@
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     align-items: stretch;
-    height: min(420px, 62vh);
+    height: min(560px, 78vh);
   }
   .quote-content {
     text-align: left;
@@ -248,13 +248,13 @@
     height: 100%;
     min-height: 0;
     min-width: 0;
-    object-fit: cover;
-    object-position: top center;
+    object-fit: contain;
+    object-position: bottom center;
     display: block;
   }
   @media (max-width: 760px) {
     .quote-section { grid-template-columns: 1fr; height: auto; }
-    .quote-photo { height: 260px; object-position: top center; }
+    .quote-photo { height: 420px; object-fit: contain; object-position: bottom center; }
     .quote-content { order: 1; }
     .quote-photo { order: 2; }
   }
