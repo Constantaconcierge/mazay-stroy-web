@@ -332,12 +332,31 @@
   /* Lead form */
   .lead-field { margin-bottom: 16px; }
   .lead-field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
-  .lead-field input, .lead-field textarea {
+  .lead-field input, .lead-field select, .lead-field textarea {
     width: 100%; border: 1px solid var(--border); border-radius: 12px;
     padding: 12px 14px; font-family: 'Inter', sans-serif; font-size: 15px;
-    color: var(--ink); background: var(--bg); resize: vertical;
+    color: var(--ink); background: var(--bg); resize: vertical; appearance: none;
   }
-  .lead-field input:focus, .lead-field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .lead-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; padding-right: 34px;
+  }
+  .lead-field input:focus, .lead-field select:focus, .lead-field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .lead-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 420px) { .lead-row { grid-template-columns: 1fr; } }
+  .lead-hint { font-weight: 400; color: var(--ink-soft); font-size: 12px; text-transform: none; letter-spacing: 0; }
+  .tech-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tech-chip {
+    position: relative; cursor: pointer; user-select: none;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 8px 14px; font-size: 13.5px; color: var(--ink);
+    background: var(--bg); transition: border-color 0.15s, background 0.15s, color 0.15s;
+  }
+  .tech-chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .tech-chip:has(input:checked) { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tech-chip:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .lead-error { display: none; color: #d64545; font-size: 12.5px; margin-top: 8px; }
+  .lead-error.show { display: block; }
   .lead-honeypot { position: absolute; left: -9999px; opacity: 0; height: 0; }
   .lead-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin: 4px 0 20px; }
   .lead-consent input { margin-top: 3px; flex-shrink: 0; }
@@ -504,7 +523,7 @@
         <h2>Оставить заявку</h2>
         <button class="modal-close" id="leadClose" aria-label="Закрыть">✕</button>
       </div>
-      <p class="modal-desc">Оставьте телефон — свяжемся и согласуем технику, сроки и объект.</p>
+      <p class="modal-desc">Заполните пару полей — сразу подготовим технику под ваши сроки и объект.</p>
 
       <form id="leadForm">
         <div class="lead-field">
@@ -512,12 +531,46 @@
           <input type="tel" id="leadPhone" name="phone" placeholder="+7 900 000-00-00" required>
         </div>
         <div class="lead-field">
-          <label for="leadService">Какая техника нужна</label>
-          <input type="text" id="leadService" name="service" placeholder="Например, экскаватор">
+          <label>Вид спецтехники * <span class="lead-hint">(можно выбрать несколько)</span></label>
+          <div class="tech-chips" id="techChips" role="group" aria-label="Вид спецтехники">
+            <label class="tech-chip"><input type="checkbox" value="Автокраны"><span>Автокраны</span></label>
+            <label class="tech-chip"><input type="checkbox" value="Экскаваторы-погрузчики"><span>Экскаваторы-погрузчики</span></label>
+            <label class="tech-chip"><input type="checkbox" value="Экскаваторы гусеничные"><span>Экскаваторы гусеничные</span></label>
+            <label class="tech-chip"><input type="checkbox" value="Экскаваторы колёсные"><span>Экскаваторы колёсные</span></label>
+            <label class="tech-chip"><input type="checkbox" value="Бульдозеры"><span>Бульдозеры</span></label>
+            <label class="tech-chip"><input type="checkbox" value="Погрузчики"><span>Погрузчики</span></label>
+            <label class="tech-chip"><input type="checkbox" value="Самосвалы"><span>Самосвалы</span></label>
+            <label class="tech-chip"><input type="checkbox" value="Кран-манипулятор"><span>Кран-манипулятор</span></label>
+            <label class="tech-chip"><input type="checkbox" value="Не знаю, нужна консультация"><span>Не знаю, нужна консультация</span></label>
+          </div>
+          <input type="hidden" id="leadService" name="service">
+          <div class="lead-error" id="techChipsError">Выберите хотя бы один вид техники</div>
+        </div>
+        <div class="lead-row">
+          <div class="lead-field">
+            <label for="leadDate">Дата начала работ</label>
+            <input type="date" id="leadDate" name="date">
+          </div>
+          <div class="lead-field">
+            <label for="leadDuration">Срок аренды</label>
+            <select id="leadDuration" name="duration">
+              <option value="" disabled selected>Выберите срок</option>
+              <option value="Несколько часов">Несколько часов</option>
+              <option value="Смена (8 часов)">Смена (8 часов)</option>
+              <option value="Сутки">Сутки</option>
+              <option value="Несколько дней">Несколько дней</option>
+              <option value="Неделя и более">Неделя и более</option>
+              <option value="Долгосрочная аренда">Долгосрочная аренда</option>
+            </select>
+          </div>
         </div>
         <div class="lead-field">
-          <label for="leadMessage">Комментарий</label>
-          <textarea id="leadMessage" name="message" rows="3" placeholder="Объект, сроки, детали работ"></textarea>
+          <label for="leadObject">Адрес объекта</label>
+          <input type="text" id="leadObject" name="object" placeholder="Город, район или адрес">
+        </div>
+        <div class="lead-field">
+          <label for="leadMessage">Какая работа нужна</label>
+          <textarea id="leadMessage" name="message" rows="3" placeholder="Опишите задачу: что нужно сделать, объём работ, доступ на объект"></textarea>
         </div>
         <input class="lead-honeypot" type="text" name="website" tabindex="-1" autocomplete="off">
         <label class="lead-consent">
@@ -856,11 +909,15 @@
   const leadService = document.getElementById('leadService');
   const leadStatus = document.getElementById('leadStatus');
   const leadSubmit = document.getElementById('leadSubmit');
+  const techChips = document.getElementById('techChips');
+  const techChipsError = document.getElementById('techChipsError');
+  const techChipInputs = Array.from(techChips.querySelectorAll('input[type="checkbox"]'));
 
   function openLeadModal(prefill) {
     leadStatus.textContent = '';
     leadStatus.className = 'lead-status';
-    leadService.value = prefill || '';
+    techChipInputs.forEach(cb => { cb.checked = prefill ? cb.value === prefill : false; });
+    techChipsError.classList.remove('show');
     leadOverlay.classList.add('open');
     lenis.stop();
     document.getElementById('leadPhone').focus();
@@ -877,8 +934,19 @@
   document.getElementById('leadClose').addEventListener('click', closeLeadModal);
   leadOverlay.addEventListener('click', (e) => { if (e.target === leadOverlay) closeLeadModal(); });
 
+  techChips.addEventListener('change', () => {
+    if (techChipInputs.some(cb => cb.checked)) techChipsError.classList.remove('show');
+  });
+
   leadForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const selectedTech = techChipInputs.filter(cb => cb.checked).map(cb => cb.value);
+    if (selectedTech.length === 0) {
+      techChipsError.classList.add('show');
+      techChips.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
+    leadService.value = selectedTech.join(', ');
     const data = new FormData(leadForm);
     leadSubmit.disabled = true;
     leadStatus.className = 'lead-status';
@@ -890,6 +958,9 @@
         body: JSON.stringify({
           phone: data.get('phone'),
           service: data.get('service'),
+          date: data.get('date'),
+          duration: data.get('duration'),
+          object: data.get('object'),
           message: data.get('message'),
           website: data.get('website'),
           site: 'mazay-stroy-web',
