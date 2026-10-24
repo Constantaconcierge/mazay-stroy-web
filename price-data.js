@@ -108,8 +108,7 @@ window.PRICE_LIST = [
       { name: 'Автовышка 28 м', specs: '', shift: 25000, hour: 3125, delivery: 100 },
       { name: 'Автовышка 35 м', specs: '', shift: 28000, hour: 3500, delivery: 110 },
       { name: 'Автовышка 40 м', specs: '', shift: 34000, hour: 4250, delivery: 120 },
-      // TODO: уточнить цену у Вадима
-      { name: 'Автовышка-вездеход 45 м', specs: '', shift: null, hour: null, delivery: 150 },
+      { name: 'Автовышка-вездеход 45 м', specs: 'Вездеход', shift: 70000, hour: 8750, delivery: 150 },
       { name: 'Автовышки до 63 м', specs: 'Цена зависит от вида работ', shift: null, hour: null, delivery: null },
     ],
   },
