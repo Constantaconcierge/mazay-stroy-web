@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Прайс-лист на аренду спецтехники — Mazay Stroy</title>
+<meta name="description" content="Цены на аренду спецтехники с НДС 22%: экскаваторы, автокраны, манипуляторы, самосвалы, погрузчики, автовышки, бульдозеры, перевозка техники. Смена 8 часов, почасовая оплата, подача за МКАД." />
+<meta property="og:title" content="Прайс-лист — Mazay Stroy" />
+<meta property="og:description" content="Цены на аренду спецтехники с НДС 22%. Минимальный заказ — 8 часов." />
+<meta property="og:image" content="images/ceo-portrait.jpg" />
+<meta property="og:type" content="website" />
+<link rel="icon" href="images/logo-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --ink: #1a1a2e;
+    --ink-soft: #5b5b6b;
+    --accent: #f2a227;
+    --accent-dark: #d98a12;
+    --border: #e7e2d6;
+    --shadow: 0 10px 30px rgba(26,26,46,0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .brand { font-family: 'Manrope', sans-serif; }
+  a { color: inherit; }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px clamp(20px, 5vw, 64px);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 50;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-group { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ink); }
+  .logo-video {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    object-fit: cover;
+    background: #17172a;
+    box-shadow: var(--shadow);
+    display: block;
+    flex: 0 0 auto;
+  }
+  .brand { font-weight: 800; font-size: 20px; letter-spacing: 0.5px; line-height: 1; }
+  .brand span { display: block; }
+  .brand .stroy { color: var(--accent-dark); }
+  .header-right { display: flex; align-items: center; gap: 20px; }
+  .tagline { font-size: 13px; color: var(--ink-soft); font-weight: 500; display: none; }
+  @media (min-width: 640px) { .tagline { display: block; } }
+  .site-nav { display: flex; gap: 8px; }
+  .site-nav a {
+    text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap;
+    padding: 9px 16px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+  }
+  .site-nav a:hover { border-color: var(--accent); }
+  .site-nav a.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+  /* Page intro */
+  .page-hero {
+    padding: clamp(36px, 6vw, 72px) clamp(20px, 5vw, 64px) clamp(20px, 3vw, 32px);
+    text-align: center;
+  }
+  .page-hero h1 {
+    font-size: clamp(30px, 5vw, 48px);
+    font-weight: 800;
+    margin: 0 0 12px;
+    line-height: 1.1;
+  }
+  .page-hero h1 .accent { color: var(--accent-dark); }
+  .page-hero p {
+    max-width: 560px;
+    margin: 0 auto;
+    color: var(--ink-soft);
+    font-size: clamp(15px, 2vw, 17px);
+    line-height: 1.6;
+  }
+
+  .price-section {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 64px) clamp(48px, 8vw, 96px);
+  }
+
+  /* VAT / min order notice */
+  .price-notice {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(242,162,39,0.15);
+    border: 1px solid rgba(242,162,39,0.35);
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 15px; font-weight: 600; line-height: 1.45;
+    margin-bottom: 20px;
+  }
+  .price-notice .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-dark); flex-shrink: 0; }
+
+  /* Filters */
+  .price-controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+  .price-search {
+    position: relative; max-width: 420px;
+  }
+  .price-search input {
+    width: 100%; border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px 12px 42px; font-family: 'Inter', sans-serif; font-size: 15px;
+    color: var(--ink); background: var(--surface); appearance: none;
+  }
+  .price-search input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .price-search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+  .cat-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cat-chip {
+    cursor: pointer; user-select: none;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 8px 14px; font-size: 13.5px; color: var(--ink);
+    background: var(--surface); font-family: 'Inter', sans-serif;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+  }
+  .cat-chip:hover { border-color: var(--accent); }
+  .cat-chip .n { color: var(--ink-soft); margin-left: 4px; font-size: 12px; }
+  .cat-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .cat-chip[aria-pressed="true"] .n { color: rgba(255,255,255,0.85); }
+  .cat-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Price table */
+  .price-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  table.price-full { width: 100%; border-collapse: collapse; }
+  table.price-full th, table.price-full td {
+    text-align: left; vertical-align: top;
+    padding: 14px 16px; font-size: 14px; line-height: 1.45;
+    border-bottom: 1px solid var(--border);
+  }
+  table.price-full thead th {
+    color: var(--ink-soft); font-weight: 600; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.5px; background: var(--surface);
+  }
+  table.price-full th.num, table.price-full td.num { text-align: right; white-space: nowrap; }
+  table.price-full .col-name { width: 26%; }
+  table.price-full .col-specs { width: 34%; }
+  table.price-full tr.cat-row th {
+    background: var(--bg);
+    font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 800;
+    padding: 12px 16px; color: var(--ink);
+  }
+  table.price-full tr.cat-row .cat-note { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; color: var(--ink-soft); margin-left: 6px; }
+  table.price-full tbody:last-child tr:last-child td { border-bottom: none; }
+  table.price-full td.name { font-weight: 600; }
+  table.price-full td.specs { color: var(--ink-soft); }
+  table.price-full td.shift { font-weight: 700; color: var(--accent-dark); }
+  table.price-full td.hour { font-weight: 600; }
+  table.price-full td.delivery { color: var(--ink-soft); }
+  table.price-full tr.item:hover td { background: #fcfbf8; }
+  .req-btn {
+    display: inline-block; cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--accent); background: transparent; color: var(--accent-dark);
+    border-radius: 999px; padding: 6px 12px;
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 12.5px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .req-btn:hover { background: var(--accent); color: var(--ink); }
+  .shift-from { display: block; margin-bottom: 6px; }
+
+  .price-empty {
+    display: none; text-align: center; padding: 40px 20px; color: var(--ink-soft); font-size: 15px;
+  }
+  .price-empty.show { display: block; }
+  .price-empty button { margin: 14px 4px 0; }
+  .price-empty button[hidden] { display: none; }
+  .search-hint { font-size: 13px; color: var(--ink-soft); margin-top: -6px; }
+  .search-hint:empty { display: none; }
+
+  /* CTA */
+  .price-cta {
+    margin-top: clamp(32px, 5vw, 48px);
+    background: var(--ink);
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(242,162,39,0.16), transparent 55%),
+      radial-gradient(circle at 90% 90%, rgba(242,162,39,0.10), transparent 50%);
+    border-radius: 28px;
+    box-shadow: 0 20px 50px rgba(26,26,46,0.25);
+    padding: clamp(28px, 5vw, 48px) clamp(24px, 5vw, 56px);
+    color: #fff;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .price-cta h2 { margin: 0 0 8px; font-size: clamp(22px, 3vw, 30px); font-weight: 800; line-height: 1.2; }
+  .price-cta p { margin: 0; color: rgba(255,255,255,0.72); font-size: 15px; line-height: 1.55; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cta-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    text-decoration: none; cursor: pointer; white-space: nowrap;
+    border-radius: 14px; padding: 14px 20px;
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px;
+    border: 1px solid transparent;
+  }
+  .cta-btn.primary { background: var(--accent); color: var(--ink); }
+  .cta-btn.primary:hover { background: var(--accent-dark); color: #fff; }
+  .cta-btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,0.3); }
+  .cta-btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Modal (lead form) */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(26,26,46,0.55);
+    display: none; align-items: flex-start; justify-content: center;
+    padding: clamp(16px, 4vw, 48px); z-index: 100; overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border-radius: 24px;
+    max-width: 460px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.3);
+    margin: auto;
+  }
+  .modal-body { padding: clamp(20px, 4vw, 36px); }
+  .modal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+  .modal-header h2 { margin: 0; font-size: clamp(22px, 3vw, 28px); }
+  .modal-close {
+    border: none; background: var(--bg); width: 40px; height: 40px; border-radius: 50%;
+    font-size: 20px; cursor: pointer; flex-shrink: 0; color: var(--ink);
+  }
+  .modal-desc { color: var(--ink-soft); line-height: 1.6; margin: 14px 0 26px; }
+
+  /* Floating lead button */
+  .fab-lead {
+    position: fixed; right: 20px; bottom: 20px; z-index: 90;
+    background: var(--ink); color: #fff; border: none; border-radius: 999px;
+    padding: 15px 22px; font-weight: 800; font-size: 14px; cursor: pointer;
+    box-shadow: 0 14px 34px rgba(26,26,46,0.35);
+    display: flex; align-items: center; gap: 8px;
+    font-family: 'Manrope', sans-serif;
+  }
+  .fab-lead:hover { background: #26263f; }
+  .fab-lead .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+  /* Lead form */
+  .lead-field { margin-bottom: 16px; }
+  .lead-field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
+  .lead-field input, .lead-field select, .lead-field textarea {
+    width: 100%; border: 1px solid var(--border); border-radius: 12px;
+    padding: 12px 14px; font-family: 'Inter', sans-serif; font-size: 15px;
+    color: var(--ink); background: var(--bg); resize: vertical; appearance: none;
+  }
+  .lead-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; padding-right: 34px;
+  }
+  .lead-field input:focus, .lead-field select:focus, .lead-field textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .lead-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 420px) { .lead-row { grid-template-columns: 1fr; } }
+  .lead-hint { font-weight: 400; color: var(--ink-soft); font-size: 12px; text-transform: none; letter-spacing: 0; }
+  .tech-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tech-chip {
+    position: relative; cursor: pointer; user-select: none;
+    border: 1px solid var(--border); border-radius: 999px;
+    padding: 8px 14px; font-size: 13.5px; color: var(--ink);
+    background: var(--bg); transition: border-color 0.15s, background 0.15s, color 0.15s;
+  }
+  .tech-chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .tech-chip:has(input:checked) { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .tech-chip:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .lead-error { display: none; color: #d64545; font-size: 12.5px; margin-top: 8px; }
+  .lead-error.show { display: block; }
+  .lead-honeypot { position: absolute; left: -9999px; opacity: 0; height: 0; }
+  .lead-consent { display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; color: var(--ink-soft); line-height: 1.5; margin: 4px 0 20px; }
+  .lead-consent input { margin-top: 3px; flex-shrink: 0; }
+  .lead-consent a, footer .credit a { text-decoration: underline; text-underline-offset: 2px; }
+  .lead-submit {
+    width: 100%; background: var(--accent); color: var(--ink); border: none; border-radius: 14px;
+    padding: 15px 20px; font-weight: 800; font-size: 15px; cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+  }
+  .lead-submit:hover { background: var(--accent-dark); color: #fff; }
+  .lead-submit:disabled { opacity: 0.6; cursor: default; }
+  .lead-status { margin-top: 14px; font-size: 14px; text-align: center; min-height: 20px; }
+  .lead-status.ok { color: #2e8b57; font-weight: 600; }
+  .lead-status.err { color: #c0392b; font-weight: 600; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px clamp(20px, 5vw, 64px);
+    display: flex; flex-wrap: wrap; gap: 20px;
+    align-items: flex-start; justify-content: space-between;
+    font-size: 13px; color: var(--ink-soft);
+  }
+  footer .credit { max-width: 480px; line-height: 1.6; }
+  footer .credit a { color: var(--ink-soft); }
+  .footer-contacts { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
+  .footer-contacts .fc-phone {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px;
+    color: var(--ink); text-decoration: none; white-space: nowrap;
+  }
+  .footer-contacts .fc-phone:hover { color: var(--accent-dark); }
+  .footer-contacts .fc-tg { color: var(--accent-dark); font-weight: 600; text-decoration: none; }
+  .footer-contacts .fc-tg:hover { text-decoration: underline; text-underline-offset: 2px; }
+
+  /* Cookie banner */
+  #cookie-banner {
+    position: fixed; left: 16px; right: 16px; bottom: 16px;
+    max-width: 520px; margin: 0 auto;
+    background: var(--ink); color: #fff;
+    border-radius: 16px; padding: 16px 20px;
+    display: none; align-items: center; gap: 16px; flex-wrap: wrap;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    z-index: 200; font-size: 13px; line-height: 1.5;
+  }
+  #cookie-banner.show { display: flex; }
+  #cookie-banner button {
+    background: var(--accent); color: var(--ink); border: none; border-radius: 10px;
+    padding: 9px 18px; font-weight: 700; cursor: pointer; font-size: 13px;
+  }
+
+  /* Tablet: specs column narrower */
+  @media (max-width: 1000px) {
+    table.price-full th, table.price-full td { padding: 12px 10px; font-size: 13.5px; }
+  }
+
+  /* Mobile: table turns into cards */
+  @media (max-width: 760px) {
+    header { padding-top: 14px; padding-bottom: 14px; }
+    .logo-video { width: 44px; height: 44px; border-radius: 12px; }
+    .brand { font-size: 17px; }
+    .logo-group { gap: 10px; }
+    .site-nav a { padding: 8px 12px; font-size: 13px; }
+
+    .price-notice { font-size: 14px; padding: 12px 14px; }
+    .price-search { max-width: none; }
+    .cat-chip { padding: 7px 12px; font-size: 13px; }
+
+    .price-wrap { background: none; border: none; box-shadow: none; border-radius: 0; overflow: visible; }
+    table.price-full, table.price-full tbody, table.price-full tr, table.price-full th, table.price-full td { display: block; width: 100%; }
+    table.price-full thead { display: none; }
+    table.price-full tbody { margin-bottom: 8px; }
+    table.price-full tr.cat-row th {
+      background: none; border: none; padding: 16px 2px 10px; font-size: 18px;
+    }
+    table.price-full tr.cat-row .cat-note { display: block; margin: 2px 0 0; }
+    table.price-full tr.item {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      box-shadow: var(--shadow); padding: 14px 16px; margin-bottom: 12px;
+    }
+    table.price-full tr.item:hover td { background: none; }
+    table.price-full td { border: none; padding: 0; }
+    table.price-full td.name { font-size: 16px; font-weight: 700; font-family: 'Manrope', sans-serif; }
+    table.price-full td.specs { margin-top: 4px; }
+    table.price-full td.specs.is-empty { display: none; }
+    table.price-full td.num {
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 12px;
+      text-align: right; white-space: normal;
+      padding-top: 9px; margin-top: 9px; border-top: 1px dashed var(--border);
+    }
+    table.price-full td.specs + td.num { margin-top: 12px; }
+    table.price-full td.num::before {
+      content: attr(data-label);
+      color: var(--ink-soft); font-weight: 500; font-size: 13px; text-align: left;
+      font-family: 'Inter', sans-serif; white-space: nowrap;
+    }
+    table.price-full td.num.is-empty { display: none; }
+    .shift-from { display: inline; margin: 0; white-space: nowrap; }
+    .shift-from + .req-btn { flex-basis: 100%; text-align: center; padding: 9px 12px; }
+
+    .price-cta { border-radius: 22px; }
+    .cta-actions { width: 100%; }
+    .cta-btn { flex: 1 1 100%; }
+
+    footer { padding-bottom: 220px; }
+    .footer-contacts { align-items: flex-start; text-align: left; }
+    .fab-lead { padding: 13px 18px; font-size: 13px; }
+  }
+  @media (max-width: 360px) {
+    .brand { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo-group" href="index.html" aria-label="Mazay Stroy — на главную">
+    <video class="logo-video" src="images/logo-mark.mp4" autoplay muted playsinline poster="images/logo-icon.png"></video>
+    <div class="brand">
+      <span>MAZAY</span>
+      <span class="stroy">STROY</span>
+    </div>
+  </a>
+  <div class="header-right">
+    <div class="tagline">Аренда спецтехники</div>
+    <nav class="site-nav" aria-label="Навигация">
+      <a href="price.html" class="active" aria-current="page">Прайс-лист</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-hero">
+  <h1>Прайс-<span class="accent">лист</span></h1>
+  <p>Аренда спецтехники с оператором — цены за смену и за час, подача за МКАД.</p>
+</section>
+
+<main class="price-section">
+  <div class="price-notice"><span class="dot"></span>Цены указаны с НДС 22%. Минимальный заказ — 8 часов.</div>
+
+  <div class="price-controls">
+    <label class="price-search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input type="search" id="priceSearch" placeholder="Поиск: кран 50 т, автовышка 22 м, гидромолот" aria-label="Поиск техники по названию" autocomplete="off">
+    </label>
+    <div class="search-hint" id="searchHint" aria-live="polite"></div>
+    <div class="cat-chips" id="catChips" role="group" aria-label="Категории техники"></div>
+  </div>
+
+  <div class="price-wrap">
+    <table class="price-full" id="priceTable">
+      <thead>
+        <tr>
+          <th class="col-name">Наименование</th>
+          <th class="col-specs">Характеристики</th>
+          <th class="num">Смена (8 ч)</th>
+          <th class="num">Час</th>
+          <th class="num">Пробег за МКАД (₽/км) / подача</th>
+        </tr>
+      </thead>
+    </table>
+    <div class="price-empty" id="priceEmpty">
+      <span id="priceEmptyText">Ничего не нашли по этому запросу.</span><br>
+      <button class="req-btn" id="priceAll" type="button" hidden></button>
+      <button class="req-btn" id="priceReset" type="button">Сбросить фильтр</button>
+    </div>
+  </div>
+
+  <div class="price-cta">
+    <div>
+      <h2>Не нашли нужную технику?</h2>
+      <p>Позвоните или напишите, подберём.</p>
+    </div>
+    <div class="cta-actions">
+      <a class="cta-btn primary" href="tel:+79850900034">+7 985 090-00-34</a>
+      <a class="cta-btn ghost" href="https://t.me/VV_198806" target="_blank" rel="noopener">Написать в Telegram</a>
+      <button class="cta-btn ghost" type="button" id="ctaLead">Оставить заявку</button>
+    </div>
+  </div>
+</main>
+
+<button class="fab-lead" id="fabLead"><span class="dot"></span>Оставить заявку</button>
+
+<div class="modal-overlay" id="leadOverlay" data-lenis-prevent>
+  <div class="modal">
+    <div class="modal-body">
+      <div class="modal-header">
+        <h2>Оставить заявку</h2>
+        <button class="modal-close" id="leadClose" aria-label="Закрыть">✕</button>
+      </div>
+      <p class="modal-desc">Заполните пару полей — сразу подготовим технику под ваши сроки и объект.</p>
+
+      <form id="leadForm">
+        <div class="lead-field">
+          <label for="leadPhone">Телефон *</label>
+          <input type="tel" id="leadPhone" name="phone" placeholder="+7 900 000-00-00" required>
+        </div>
+        <div class="lead-field">
+          <label>Вид спецтехники * <span class="lead-hint">(можно выбрать несколько)</span></label>
+          <div class="tech-chips" id="techChips" role="group" aria-label="Вид спецтехники"></div>
+          <input type="hidden" id="leadService" name="service">
+          <div class="lead-error" id="techChipsError">Выберите хотя бы один вид техники</div>
+        </div>
+        <div class="lead-row">
+          <div class="lead-field">
+            <label for="leadDate">Дата начала работ</label>
+            <input type="date" id="leadDate" name="date">
+          </div>
+          <div class="lead-field">
+            <label for="leadDuration">Срок аренды</label>
+            <select id="leadDuration" name="duration">
+              <option value="" disabled selected>Выберите срок</option>
+              <option value="Несколько часов">Несколько часов</option>
+              <option value="Смена (8 часов)">Смена (8 часов)</option>
+              <option value="Сутки">Сутки</option>
+              <option value="Несколько дней">Несколько дней</option>
+              <option value="Неделя и более">Неделя и более</option>
+              <option value="Долгосрочная аренда">Долгосрочная аренда</option>
+            </select>
+          </div>
+        </div>
+        <div class="lead-field">
+          <label for="leadObject">Адрес объекта</label>
+          <input type="text" id="leadObject" name="object" placeholder="Город, район или адрес">
+        </div>
+        <div class="lead-field">
+          <label for="leadMessage">Какая работа нужна</label>
+          <textarea id="leadMessage" name="message" rows="3" placeholder="Опишите задачу: что нужно сделать, объём работ, доступ на объект"></textarea>
+        </div>
+        <input class="lead-honeypot" type="text" name="website" tabindex="-1" autocomplete="off">
+        <label class="lead-consent">
+          <input type="checkbox" required>
+          <span>Согласен(на) на <a href="privacy.html" target="_blank" rel="noopener">обработку персональных данных</a> для связи по заявке.</span>
+        </label>
+        <button type="submit" class="lead-submit" id="leadSubmit">Отправить заявку</button>
+        <div class="lead-status" id="leadStatus"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="credit">
+    © 2026 Mazay Stroy. Цены указаны с учётом НДС 22%, безналичный расчёт.<br>
+    <a href="index.html">На главную</a> · <a href="privacy.html">Политика обработки персональных данных</a>
+  </div>
+  <div class="footer-contacts">
+    <a class="fc-phone" href="tel:+79850900034">+7 985 090-00-34</a>
+    <span class="fc-name">Мазаев В.В.</span>
+    <a class="fc-tg" href="https://t.me/VV_198806" target="_blank" rel="noopener">Telegram: @VV_198806</a>
+  </div>
+</footer>
+
+<div id="cookie-banner">
+  <span>Сайт использует файлы cookie для корректной работы.</span>
+  <button id="cookieAccept">Хорошо</button>
+</div>
+
+<script src="price-data.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+  // Lenis smooth scroll
+  const lenis = new Lenis({
+    lerp: 0.12, // no CSS scroll-behavior: smooth on html — it fights Lenis and delays the first wheel ticks
+    smoothWheel: true,
+    prevent: (node) => node.closest && !!node.closest('[data-lenis-prevent]'),
+  });
+  function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+
+  // Price list (data lives in price-data.js)
+  const categories = window.PRICE_LIST;
+  const priceTable = document.getElementById('priceTable');
+  const priceEmpty = document.getElementById('priceEmpty');
+  const priceSearch = document.getElementById('priceSearch');
+  const catChips = document.getElementById('catChips');
+  const searchHint = document.getElementById('searchHint');
+  const priceEmptyText = document.getElementById('priceEmptyText');
+  const priceAll = document.getElementById('priceAll');
+
+  const NBSP = ' ';
+  function money(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, NBSP) + NBSP + '₽'; }
+  function esc(s) { return String(s).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch])); }
+
+  // Flat list with a stable id per row, used by the "Запросить цену" buttons
+  const rows = [];
+  categories.forEach((c) => c.items.forEach((item) => rows.push({ cat: c, item, id: rows.length })));
+
+  function requestBtn(id) {
+    return `<button class="req-btn" type="button" data-req="${id}">Запросить цену</button>`;
+  }
+  function shiftCell(r) {
+    const { shift, request } = r.item;
+    if (shift === null || shift === undefined) return requestBtn(r.id);
+    const text = typeof shift === 'number' ? money(shift) : esc(shift);
+    return request ? `<span class="shift-from">${text}</span>${requestBtn(r.id)}` : text;
+  }
+  function deliveryText(d) {
+    if (d === null || d === undefined || d === '') return '';
+    return typeof d === 'number' ? `${money(d)}/км` : esc(d);
+  }
+  function numCell(cls, label, html) {
+    return `<td class="num ${cls}${html ? '' : ' is-empty'}" data-label="${label}">${html || '—'}</td>`;
+  }
+  function rowHtml(r) {
+    const { name, specs, hour, delivery } = r.item;
+    return `<tr class="item">
+      <td class="name">${esc(name)}</td>
+      <td class="specs${specs ? '' : ' is-empty'}">${specs ? esc(specs) : '—'}</td>
+      ${numCell('shift', 'Смена (8 ч)', shiftCell(r))}
+      ${numCell('hour', 'Час', typeof hour === 'number' ? money(hour) : '')}
+      ${numCell('delivery', 'Пробег за МКАД / подача', deliveryText(delivery))}
+    </tr>`;
+  }
+
+  // ---- Search ----
+  // Understands word forms (автовышка → Автовышки), numbers with units (кран 50 т, 25т, 1400 кг, 13,6 м),
+  // category synonyms (price-data.js → search), brand names in Russian, small typos and a wrong keyboard layout.
+  const BRAND_ALIASES = {
+    volvo: 'вольво', xcmg: 'хцмг иксиэмджи', takeuchi: 'такеучи', hitachi: 'хитачи', komatsu: 'комацу',
+    caterpillar: 'катерпиллер кат cat', shantui: 'шантуй', delta: 'дельта', 'мтз': 'беларус belarus',
+  };
+  const UNIT_WORDS = [
+    [/^(т|тн|тонн\S*|тонна|тонны)$/, 'т'],
+    [/^(м|метр\S*|мет)$/, 'м'],
+    [/^(куб|кубов\S*|куба|кубы|кубик\S*|кубометр\S*)$/, 'куб'],
+    [/^(кг|килограмм\S*)$/, 'кг'],
+    [/^(км|километр\S*)$/, 'км'],
+  ];
+  const ENDINGS = ['ами', 'ями', 'ого', 'его', 'ому', 'ему', 'ыми', 'ими', 'ых', 'их', 'ой', 'ей', 'ий', 'ый', 'ая', 'яя', 'ое', 'ее', 'ые', 'ие', 'ую', 'юю', 'ов', 'ев', 'ам', 'ям', 'ах', 'ях', 'ом', 'ем', 'а', 'я', 'ы', 'и', 'у', 'ю', 'е', 'о', 'ь'];
+  const LAYOUT_EN = "qwertyuiop[]asdfghjkl;'zxcvbnm,.`";
+  const LAYOUT_RU = 'йцукенгшщзхъфывапролджэячсмитьбюё';
+
+  function tokenize(s) {
+    return String(s).toLowerCase().replace(/ё/g, 'е')
+      .replace(/(\d)[\s ](?=\d{3}(?!\d))/g, '$1')   // 1 400 → 1400
+      .replace(/м³|м3|m3/g, ' куб ')
+      .replace(/(\d),(?=\d)/g, '$1.')                      // 13,6 → 13.6
+      .replace(/(\d)(?=[a-zа-я])|([a-zа-я])(?=\d)/g, '$1$2 ') // 25т → 25 т
+      .replace(/[^a-zа-я0-9.]+/g, ' ')
+      .split(' ')
+      .map((t) => t.replace(/^\.+|\.+$/g, ''))
+      .filter(Boolean)
+      .map((t) => { const u = UNIT_WORDS.find(([re]) => re.test(t)); return u ? u[1] : t; });
+  }
+  function stem(w) {
+    if (/\d/.test(w) || w.length <= 4) return w;
+    const end = ENDINGS.find((e) => w.endsWith(e) && w.length - e.length >= 4);
+    return end ? w.slice(0, -end.length) : w;
+  }
+  function lev(a, b) {
+    const d = Array.from({ length: b.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+      let prev = d[0];
+      d[0] = i;
+      for (let j = 1; j <= b.length; j++) {
+        const tmp = d[j];
+        d[j] = Math.min(d[j] + 1, d[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+        prev = tmp;
+      }
+    }
+    return d[b.length];
+  }
+  function isNum(t) { return /^\d+(\.\d+)?$/.test(t); }
+
+  // Search index per row: name, specs, category, synonyms, brand aliases
+  rows.forEach((r) => {
+    const raw = [r.item.name, r.item.name.replace(/-/g, ''), r.item.specs, r.cat.title, r.cat.search || ''].join(' ');
+    const extra = Object.keys(BRAND_ALIASES).filter((b) => raw.toLowerCase().includes(b)).map((b) => BRAND_ALIASES[b]);
+    r.words = tokenize(raw + ' ' + extra.join(' '));
+    r.hay = ` ${r.words.join(' ')} `;
+  });
+
+  // Query → terms: numbers (optionally glued to the following unit) and word stems
+  function parseQuery(q) {
+    const toks = tokenize(q);
+    const terms = [];
+    for (let i = 0; i < toks.length; i++) {
+      const t = toks[i];
+      const isUnit = UNIT_WORDS.some(([, u]) => u === t);
+      if (isNum(t)) {
+        const next = toks[i + 1];
+        if (next && UNIT_WORDS.some(([, u]) => u === next)) { terms.push({ phrase: `${t} ${next}` }); i++; }
+        else terms.push({ num: t });
+      } else if (isUnit && t.length === 1) {
+        continue; // lone «т» / «м» says nothing
+      } else {
+        terms.push({ word: stem(t) });
+      }
+    }
+    return terms;
+  }
+  function termMatches(r, term) {
+    if (term.phrase) return r.hay.includes(` ${term.phrase} `);
+    if (term.num) return r.words.includes(term.num);
+    const w = term.word;
+    if (r.hay.includes(w)) return true;
+    if (w.length < 5) return false;
+    const tol = w.length >= 8 ? 2 : 1; // forgive small typos: эксковатор, манепулятор
+    return r.words.some((hw) => hw.length >= w.length - 1 &&
+      [w.length - 1, w.length, w.length + 1].some((len) => lev(w, hw.slice(0, len)) <= tol));
+  }
+  function searchRows(q) {
+    const terms = parseQuery(q);
+    if (!terms.length) return rows;
+    return rows.filter((r) => terms.every((t) => termMatches(r, t)));
+  }
+  function switchLayout(q) {
+    return q.toLowerCase().split('').map((ch) => { const i = LAYOUT_EN.indexOf(ch); return i >= 0 ? LAYOUT_RU[i] : ch; }).join('');
+  }
+  // Returns matching rows; retries in the Russian layout if nothing was found (rfy → кран)
+  function findRows(q) {
+    let found = searchRows(q);
+    let fixed = '';
+    if (!found.length && /[a-z]/i.test(q)) {
+      const alt = switchLayout(q);
+      const altFound = searchRows(alt);
+      if (altFound.length) { found = altFound; fixed = alt; }
+    }
+    return { found, fixed };
+  }
+
+  let activeCat = 'all';
+  function render() {
+    const { found, fixed } = findRows(priceSearch.value);
+    searchHint.textContent = fixed ? `Показаны результаты по запросу «${fixed}»` : '';
+    let html = '';
+    let shown = 0;
+    categories.forEach((c) => {
+      if (activeCat !== 'all' && c.key !== activeCat) return;
+      const list = found.filter((r) => r.cat === c);
+      if (!list.length) return;
+      shown += list.length;
+      const note = c.note ? `<span class="cat-note">${esc(c.note)}</span>` : '';
+      html += `<tbody><tr class="cat-row"><th colspan="5">${esc(c.title)}${note}</th></tr>${list.map(rowHtml).join('')}</tbody>`;
+    });
+    // One tbody per category
+    priceTable.querySelectorAll('tbody').forEach((tb) => tb.remove());
+    priceTable.insertAdjacentHTML('beforeend', html);
+    priceEmpty.classList.toggle('show', shown === 0);
+    // Nothing in the selected category, but there are matches elsewhere — offer to search everywhere
+    const elsewhere = shown === 0 && activeCat !== 'all' ? found.length : 0;
+    priceEmptyText.textContent = elsewhere ? `В категории «${categories.find((c) => c.key === activeCat).title}» ничего не нашли.` : 'Ничего не нашли по этому запросу.';
+    priceAll.hidden = !elsewhere;
+    priceAll.textContent = `Найдено в других категориях: ${elsewhere} — показать`;
+  }
+  function renderChips() {
+    const all = [{ key: 'all', title: 'Все', n: rows.length }]
+      .concat(categories.map((c) => ({ key: c.key, title: c.title, n: c.items.length })));
+    catChips.innerHTML = all.map((c) => `
+      <button class="cat-chip" type="button" data-cat="${c.key}" aria-pressed="${c.key === activeCat}">${esc(c.title)}<span class="n">${c.n}</span></button>
+    `).join('');
+  }
+  function setCat(key) {
+    activeCat = categories.some((c) => c.key === key) ? key : 'all';
+    catChips.querySelectorAll('.cat-chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === activeCat)));
+    const url = new URL(location.href);
+    if (activeCat === 'all') url.searchParams.delete('cat'); else url.searchParams.set('cat', activeCat);
+    history.replaceState(null, '', url);
+    render();
+  }
+  catChips.addEventListener('click', (e) => {
+    const b = e.target.closest('.cat-chip');
+    if (b) setCat(b.dataset.cat);
+  });
+  priceSearch.addEventListener('input', render);
+  priceAll.addEventListener('click', () => setCat('all'));
+  document.getElementById('priceReset').addEventListener('click', () => {
+    priceSearch.value = '';
+    setCat('all');
+  });
+
+  const initialCat = new URLSearchParams(location.search).get('cat');
+  if (initialCat && categories.some((c) => c.key === initialCat)) activeCat = initialCat;
+  renderChips();
+  render();
+
+  // Lead form (sends to the Telegram leads bot)
+  const LEAD_ENDPOINT = 'https://telegram-leads-bot.vercel.app/api/lead';
+  const leadOverlay = document.getElementById('leadOverlay');
+  const leadForm = document.getElementById('leadForm');
+  const leadService = document.getElementById('leadService');
+  const leadMessage = document.getElementById('leadMessage');
+  const leadStatus = document.getElementById('leadStatus');
+  const leadSubmit = document.getElementById('leadSubmit');
+  const techChips = document.getElementById('techChips');
+  const techChipsError = document.getElementById('techChipsError');
+
+  // Equipment chips in the form follow the price list categories
+  techChips.innerHTML = categories.map((c) => c.title).concat('Не знаю, нужна консультация').map((t) => `
+    <label class="tech-chip"><input type="checkbox" value="${esc(t)}"><span>${esc(t)}</span></label>
+  `).join('');
+  const techChipInputs = Array.from(techChips.querySelectorAll('input[type="checkbox"]'));
+
+  function openLeadModal(prefillCat, prefillMessage) {
+    leadStatus.textContent = '';
+    leadStatus.className = 'lead-status';
+    techChipInputs.forEach((cb) => { cb.checked = prefillCat ? cb.value === prefillCat : false; });
+    if (prefillMessage) leadMessage.value = prefillMessage;
+    techChipsError.classList.remove('show');
+    leadOverlay.classList.add('open');
+    lenis.stop();
+    document.getElementById('leadPhone').focus();
+  }
+  function closeLeadModal() {
+    leadOverlay.classList.remove('open');
+    lenis.start();
+  }
+  document.getElementById('fabLead').addEventListener('click', () => openLeadModal(''));
+  document.getElementById('ctaLead').addEventListener('click', () => openLeadModal(''));
+  document.querySelector('.price-wrap').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-req]');
+    if (!b) return;
+    const r = rows[Number(b.dataset.req)];
+    const what = r.item.specs ? `${r.item.name} (${r.item.specs})` : r.item.name;
+    openLeadModal(r.cat.title, `Запрос цены: ${what}`);
+  });
+  document.getElementById('leadClose').addEventListener('click', closeLeadModal);
+  leadOverlay.addEventListener('click', (e) => { if (e.target === leadOverlay) closeLeadModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && leadOverlay.classList.contains('open')) closeLeadModal();
+  });
+
+  techChips.addEventListener('change', () => {
+    if (techChipInputs.some((cb) => cb.checked)) techChipsError.classList.remove('show');
+  });
+
+  leadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const selectedTech = techChipInputs.filter((cb) => cb.checked).map((cb) => cb.value);
+    if (selectedTech.length === 0) {
+      techChipsError.classList.add('show');
+      techChips.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
+    leadService.value = selectedTech.join(', ');
+    const data = new FormData(leadForm);
+    leadSubmit.disabled = true;
+    leadStatus.className = 'lead-status';
+    leadStatus.textContent = 'Отправляем…';
+    try {
+      const res = await fetch(LEAD_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: data.get('phone'),
+          service: data.get('service'),
+          date: data.get('date'),
+          duration: data.get('duration'),
+          object: data.get('object'),
+          message: data.get('message'),
+          website: data.get('website'),
+          site: 'mazay-stroy-web',
+        }),
+      });
+      if (res.ok) {
+        leadStatus.textContent = 'Заявка отправлена! Скоро свяжемся.';
+        leadStatus.className = 'lead-status ok';
+        leadForm.reset();
+        setTimeout(closeLeadModal, 1800);
+      } else {
+        throw new Error('bad response');
+      }
+    } catch (err) {
+      leadStatus.textContent = 'Не удалось отправить. Попробуйте ещё раз.';
+      leadStatus.className = 'lead-status err';
+    } finally {
+      leadSubmit.disabled = false;
+    }
+  });
+
+  // Cookie banner (sets a real cookie, not just localStorage)
+  function setCookie(name, value, days) {
+    const d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+  }
+  function getCookie(name) {
+    return document.cookie.split('; ').find((row) => row.startsWith(name + '='));
+  }
+  const cookieBanner = document.getElementById('cookie-banner');
+  if (!getCookie('mazay_cookie_consent')) {
+    setTimeout(() => cookieBanner.classList.add('show'), 800);
+  }
+  document.getElementById('cookieAccept').addEventListener('click', () => {
+    setCookie('mazay_cookie_consent', '1', 180);
+    cookieBanner.classList.remove('show');
+  });
+</script>
+</body>
+</html>

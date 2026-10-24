@@ -26,7 +26,6 @@
     --shadow: 0 10px 30px rgba(26,26,46,0.08);
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     background: var(--bg);
@@ -65,6 +64,15 @@
   .brand .stroy { color: var(--accent-dark); }
   .tagline { font-size: 13px; color: var(--ink-soft); font-weight: 500; display: none; }
   @media (min-width: 640px) { .tagline { display: block; } }
+  .header-right { display: flex; align-items: center; gap: 20px; }
+  .site-nav { display: flex; gap: 8px; }
+  .site-nav a {
+    text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap;
+    padding: 9px 16px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink);
+    transition: border-color 0.15s;
+  }
+  .site-nav a:hover { border-color: var(--accent); }
 
   /* Hero */
   .hero {
@@ -142,6 +150,14 @@
   .card-body h3 { margin: 0 0 6px; font-size: 18px; font-weight: 700; }
   .card-body .price-hint { color: var(--accent-dark); font-weight: 700; font-size: 14px; }
   .card-body .count { color: var(--ink-soft); font-size: 13px; margin-top: 4px; }
+  .marquee-more { text-align: center; margin-top: 32px; padding: 0 20px; }
+  .btn-outline {
+    display: inline-block; text-decoration: none;
+    border: 1px solid var(--ink); border-radius: 14px; padding: 13px 22px;
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 15px; color: var(--ink);
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-outline:hover { background: var(--ink); color: #fff; }
 
   /* Advantages */
   .section {
@@ -296,13 +312,22 @@
     font-size: 13px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
     color: var(--ink-soft); margin: 0 0 12px;
   }
+  .modal-price-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .modal-price-link { font-size: 13px; font-weight: 700; color: var(--accent-dark); text-decoration: none; white-space: nowrap; }
+  .modal-price-link:hover { text-decoration: underline; text-underline-offset: 2px; }
   table.price-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
   table.price-table th, table.price-table td {
     text-align: left; padding: 12px 10px; font-size: 14px; border-bottom: 1px solid var(--border);
   }
-  table.price-table th { color: var(--ink-soft); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+  table.price-table th { color: var(--ink-soft); font-weight: 600; font-size: 12px; text-transform: uppercase; white-space: nowrap; }
   table.price-table td.price { font-weight: 700; color: var(--accent-dark); white-space: nowrap; }
-  table.price-table td.delivery { color: var(--ink-soft); white-space: nowrap; }
+  table.price-table td.delivery { color: var(--ink-soft); }
+  table.price-table td.price-hour { white-space: nowrap; }
+  table.price-table .spec { color: var(--ink-soft); font-size: 12.5px; margin-top: 3px; }
+  @media (max-width: 560px) {
+    table.price-table th, table.price-table td { padding: 10px 6px; font-size: 13px; }
+    table.price-table .price-hour { display: none; }
+  }
 
   .faq-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
   .faq-item:last-child { border-bottom: none; }
@@ -382,6 +407,14 @@
   }
   footer .credit { max-width: 480px; }
   footer .credit a { color: var(--ink-soft); }
+  .footer-contacts { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
+  .footer-contacts .fc-phone {
+    font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px;
+    color: var(--ink); text-decoration: none; white-space: nowrap;
+  }
+  .footer-contacts .fc-phone:hover { color: var(--accent-dark); }
+  .footer-contacts .fc-tg { color: var(--accent-dark); font-weight: 600; text-decoration: none; }
+  .footer-contacts .fc-tg:hover { text-decoration: underline; text-underline-offset: 2px; }
 
   /* Cookie banner */
   #cookie-banner {
@@ -400,8 +433,11 @@
   }
 
   @media (max-width: 760px) {
-    footer { padding-bottom: 220px; }
+    footer { padding-bottom: 220px; align-items: flex-start; }
+    .footer-contacts { align-items: flex-start; text-align: left; }
     .fab-lead { padding: 13px 18px; font-size: 13px; }
+    header { gap: 12px; }
+    .site-nav a { padding: 8px 12px; font-size: 13px; }
   }
 </style>
 </head>
@@ -415,7 +451,12 @@
       <span class="stroy">STROY</span>
     </div>
   </div>
-  <div class="tagline">Аренда спецтехники</div>
+  <div class="header-right">
+    <div class="tagline">Аренда спецтехники</div>
+    <nav class="site-nav" aria-label="Навигация">
+      <a href="price.html">Прайс-лист</a>
+    </nav>
+  </div>
 </header>
 
 <section class="hero">
@@ -429,6 +470,7 @@
 
 <section class="marquee-section">
   <div class="marquee-track" id="marqueeTrack"></div>
+  <div class="marquee-more"><a class="btn-outline" href="price.html">Полный прайс-лист →</a></div>
 </section>
 
 <section class="section">
@@ -437,7 +479,7 @@
     <div class="adv-card">
       <div class="num">01</div>
       <h3>Широкий парк техники</h3>
-      <p>8 категорий, больше 20 моделей — от компактных погрузчиков до 30-тонных автокранов.</p>
+      <p>Больше 50 позиций в прайсе — от мини-экскаваторов до автокранов на 350 тонн, автовышки, манипуляторы и перевозка техники.</p>
     </div>
     <div class="adv-card">
       <div class="num">02</div>
@@ -504,10 +546,13 @@
       </div>
       <p class="modal-desc" id="modalDesc"></p>
 
-      <p class="modal-section-title">Прайс-лист</p>
+      <div class="modal-price-head">
+        <p class="modal-section-title">Прайс-лист</p>
+        <a class="modal-price-link" id="modalPriceLink" href="price.html">Полный прайс →</a>
+      </div>
       <table class="price-table">
         <thead>
-          <tr><th>Модель</th><th>Цена</th><th>Доставка</th></tr>
+          <tr><th>Модель</th><th>Смена 8 ч</th><th class="price-hour">Час</th><th>Подача</th></tr>
         </thead>
         <tbody id="modalModels"></tbody>
       </table>
@@ -538,17 +583,7 @@
         </div>
         <div class="lead-field">
           <label>Вид спецтехники * <span class="lead-hint">(можно выбрать несколько)</span></label>
-          <div class="tech-chips" id="techChips" role="group" aria-label="Вид спецтехники">
-            <label class="tech-chip"><input type="checkbox" value="Автокраны"><span>Автокраны</span></label>
-            <label class="tech-chip"><input type="checkbox" value="Экскаваторы-погрузчики"><span>Экскаваторы-погрузчики</span></label>
-            <label class="tech-chip"><input type="checkbox" value="Экскаваторы гусеничные"><span>Экскаваторы гусеничные</span></label>
-            <label class="tech-chip"><input type="checkbox" value="Экскаваторы колёсные"><span>Экскаваторы колёсные</span></label>
-            <label class="tech-chip"><input type="checkbox" value="Бульдозеры"><span>Бульдозеры</span></label>
-            <label class="tech-chip"><input type="checkbox" value="Погрузчики"><span>Погрузчики</span></label>
-            <label class="tech-chip"><input type="checkbox" value="Самосвалы"><span>Самосвалы</span></label>
-            <label class="tech-chip"><input type="checkbox" value="Кран-манипулятор"><span>Кран-манипулятор</span></label>
-            <label class="tech-chip"><input type="checkbox" value="Не знаю, нужна консультация"><span>Не знаю, нужна консультация</span></label>
-          </div>
+          <div class="tech-chips" id="techChips" role="group" aria-label="Вид спецтехники"></div>
           <input type="hidden" id="leadService" name="service">
           <div class="lead-error" id="techChipsError">Выберите хотя бы один вид техники</div>
         </div>
@@ -594,7 +629,12 @@
   <div class="credit">
     © 2026 Mazay Stroy. Стоимость указана за одну машиносмену (8 часов) с учётом НДС 22%.<br>
     Фото техники: Wikimedia Commons (CC BY-SA / CC0 / Public Domain).<br>
-    <a href="privacy.html">Политика обработки персональных данных</a>
+    <a href="price.html">Прайс-лист</a> · <a href="privacy.html">Политика обработки персональных данных</a>
+  </div>
+  <div class="footer-contacts">
+    <a class="fc-phone" href="tel:+79850900034">+7 985 090-00-34</a>
+    <span class="fc-name">Мазаев В.В.</span>
+    <a class="fc-tg" href="https://t.me/VV_198806" target="_blank" rel="noopener">Telegram: @VV_198806</a>
   </div>
 </footer>
 
@@ -603,11 +643,12 @@
   <button id="cookieAccept">Хорошо</button>
 </div>
 
+<script src="price-data.js"></script>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
   // Lenis smooth scroll
   const lenis = new Lenis({
-    duration: 0.9,
+    lerp: 0.12, // no CSS scroll-behavior: smooth on html — it fights Lenis and delays the first wheel ticks
     smoothWheel: true,
     prevent: (node) => node.closest && !!node.closest('[data-lenis-prevent]'),
   });
@@ -655,121 +696,90 @@
   introLogo.addEventListener('ended', flyLogoToHeader);
   setTimeout(flyLogoToHeader, 3600); // fallback if 'ended' doesn't fire (autoplay blocked, etc.)
 
-  // Equipment data
+  // Equipment cards. Prices are NOT stored here — models come from price-data.js (window.PRICE_LIST):
+  // priceCats — which price list categories feed the card, match — optional filter by model name.
   const categories = [
     {
-      key: 'krany', title: 'Автокраны', img: 'images/krany.jpg',
-      desc: 'Поднимаем и монтируем тяжёлые грузы, работаем на высоте. От лёгкого КС-3577 до мощного XCMG на 30 тонн — подберём кран под вашу задачу.',
-      models: [
-        ['КС-55713-1К 25 т, стрела с гуськом 28,5 м', '26 000 ₽', '—'],
-        ['КС-3577 14 т, вылет стрелы 14 м', '21 000 ₽', '—'],
-        ['УРАЛ-5551 14 т', '20 000 ₽', '—'],
-        ['XCMG QY25K 30 т, вылет стрелы 32+8 м', '28 000 ₽', '—'],
-      ],
+      key: 'krany', title: 'Автокраны', img: 'images/krany.jpg', priceCats: ['avtokrany'],
+      desc: 'Поднимаем и монтируем тяжёлые грузы, работаем на высоте. Автокраны от 25 до 350 тонн — подберём кран под вашу задачу.',
       faq: [
         ['Нужен ли машинист отдельно?', 'Нет, машинист всегда включён в стоимость аренды автокрана.'],
-        ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 22%.'],
+        ['Как считается цена на краны от 200 тонн?', 'Индивидуально: по фото/видео объекта или с выездом специалиста (10 000 ₽, Москва).'],
       ],
     },
     {
-      key: 'pogr-eksk', title: 'Экскаваторы-погрузчики', img: 'images/pogr-eksk.jpg',
+      key: 'pogr-eksk', title: 'Экскаваторы-погрузчики', img: 'images/pogr-eksk.jpg', priceCats: ['ekskavatory'], match: /^Экскаватор-погрузчик/,
       desc: 'Универсальная техника 2-в-1: спереди ковш для погрузки, сзади стрела для рытья траншей и котлованов. Хорошо заходят на небольшие и городские объекты.',
-      models: [
-        ['JCB-3CX', '20 000 ₽', 'от 7 500 ₽'],
-        ['TEREX 880', '20 000 ₽', 'от 7 500 ₽'],
-        ['TEREX 880 с гидромолотом', '23 000 ₽', 'от 7 500 ₽'],
-      ],
       faq: [
         ['Что такое гидромолот и когда он нужен?', 'Навесное оборудование для разрушения асфальта, бетона, мёрзлого грунта и скальных пород — устанавливается вместо ковша.'],
         ['Подходит для небольшого участка?', 'Да, за счёт компактных размеров такая техника — оптимальный выбор для городских и стеснённых объектов.'],
       ],
     },
     {
-      key: 'eksk-gus', title: 'Экскаваторы гусеничные', img: 'images/eksk-gus.jpg',
-      desc: 'Тяжёлая техника для больших объёмов земляных работ — рытьё котлованов, траншей, демонтаж. Часть моделей доступна с гидромолотом.',
-      models: [
-        ['Hyundai R210 (1 куб)', '23 000 ₽', 'от 30 000 ₽'],
-        ['Hyundai R210NLC-9 (габарит, 1 куб)', '23 000 ₽', 'от 20 000 ₽'],
-        ['Hyundai R300L (1,3 м³)', '27 000 ₽', 'от 40 000 ₽'],
-        ['Hyundai R300L с гидромолотом', '30 000 ₽', 'от 40 000 ₽'],
-        ['Hyundai R260LC-9S (1,3 м³)', '26 000 ₽', 'от 40 000 ₽'],
-        ['Hyundai R260LC-9S с гидромолотом', '29 000 ₽', 'от 40 000 ₽'],
-        ['Case CX210B (габарит, 1 куб)', '23 000 ₽', 'от 20 000 ₽'],
-        ['Case CX210B NLC (1,1–1,3 м³, 2 ед.)', '23 000 ₽', '—'],
-        ['Case CX210B NLC с гидромолотом', '27 000 ₽', '—'],
-        ['JCB 220 полноповоротный (1,2 куб)', '24 000 ₽', 'от 20 000 ₽'],
-        ['JCB 180 полноповоротный (габарит)', '23 000 ₽', 'от 20 000 ₽'],
-        ['Volvo EC140B (0,8 м³)', '22 000 ₽', '—'],
-      ],
+      key: 'eksk-gus', title: 'Экскаваторы гусеничные', img: 'images/eksk-gus.jpg', priceCats: ['ekskavatory'], match: /^(Гусеничный|Мини-экскаватор)/,
+      desc: 'Тяжёлая техника для больших объёмов земляных работ — рытьё котлованов, траншей, демонтаж. Есть варианты с гидромолотом и грейфером, а для стеснённых площадок — мини-экскаваторы от 2,5 т.',
       faq: [
-        ['Чем гусеничный экскаватор отличается от колёсного?', 'Гусеницы дают лучшую проходимость и устойчивость на грунте, но для переезда между объектами такой технике нужен трал.'],
-        ['Можно взять экскаватор с гидромолотом?', 'Да, часть моделей доступна с гидромолотом — для разрушения бетона, асфальта и мёрзлого грунта.'],
+        ['Как гусеничный экскаватор попадает на объект?', 'Полноразмерные гусеничные экскаваторы доставляем тралом, мини-экскаваторы — эвакуатором.'],
+        ['Можно взять экскаватор с гидромолотом?', 'Да — с гидромолотом Delta F-10 (1200 кг) для разрушения бетона, асфальта и мёрзлого грунта.'],
       ],
     },
     {
-      key: 'eksk-koles', title: 'Экскаваторы колёсные', img: 'images/eksk-koles.jpg',
-      desc: 'Передвигаются своим ходом по дорогам общего пользования — не нужен трал. Удобны, когда технику нужно быстро перебросить между объектами.',
-      models: [
-        ['Volvo EW180C (масса 19 т, ковш 0,9 м³)', '23 000 ₽', '—'],
-        ['Volvo EW180C с гидромолотом', '27 000 ₽', '—'],
-        ['JCB JS160W (масса 17 т, ковш 0,9 м³)', '23 000 ₽', '—'],
-        ['JCB JS160W с грейферным оборудованием', '27 000 ₽', '—'],
-        ['CAT M315D (масса 17 т, ковш 0,9 м³)', '23 000 ₽', '—'],
-        ['CAT M315D с гидромолотом', '27 000 ₽', '—'],
-      ],
+      key: 'eksk-koles', title: 'Экскаваторы колёсные', img: 'images/eksk-koles.jpg', priceCats: ['ekskavatory'], match: /^Колёсный экскаватор/,
+      desc: 'Колёсный ход меньше повреждает асфальт и плитку, чем гусеницы, — удобно для городских объектов. Доступны с гидромолотом и грейфером (глубина до 13 м).',
       faq: [
-        ['Чем колёсный экскаватор отличается от гусеничного?', 'Передвигается своим ходом по дорогам общего пользования, не нужен трал для перевозки — быстрее перебрасывается между объектами.'],
+        ['Как колёсный экскаватор попадает на объект?', 'Доставляем тралом, вариант с грейфером — тралом и манипулятором.'],
         ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 22%.'],
       ],
     },
     {
-      key: 'buldozery', title: 'Бульдозеры', img: 'images/buldozery.jpg',
-      desc: 'Планировка площадок, расчистка участков, перемещение больших объёмов грунта.',
-      models: [
-        ['ДЗ-171 (Т-130, Т-170)', '23 000 ₽', 'от 35 000 ₽'],
-        ['Caterpillar D6', '31 000 ₽', 'от 46 000 ₽'],
-      ],
+      key: 'buldozery', title: 'Бульдозеры', img: 'images/buldozery.jpg', priceCats: ['buldozery'],
+      desc: 'Планировка площадок, расчистка участков, перемещение больших объёмов грунта. Есть болотоходы.',
       faq: [
         ['Для каких задач нужен бульдозер, а не экскаватор?', 'Бульдозер эффективен для перемещения и разравнивания больших объёмов грунта по поверхности, а не для рытья вглубь.'],
         ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 22%.'],
       ],
     },
     {
-      key: 'pogruzchiki', title: 'Погрузчики', img: 'images/pogruzchiki.jpg',
-      desc: 'Компактный манёвренный погрузчик для работы на ограниченной площади — погрузка сыпучих материалов, уборка территории.',
-      models: [
-        ['BOBCAT', '20 000 ₽', 'от 20 000 ₽'],
-      ],
+      key: 'pogruzchiki', title: 'Погрузчики', img: 'images/pogruzchiki.jpg', priceCats: ['minipogruzchiki', 'frontalnye'],
+      desc: 'Минипогрузчики для работы на ограниченной площади и фронтальные погрузчики для больших объёмов — погрузка сыпучих материалов, уборка территории.',
       faq: [
-        ['Для каких задач подходит компактный погрузчик?', 'Уборка территории, погрузка сыпучих материалов, работа в стеснённых условиях, куда крупная техника не заедет.'],
+        ['Для каких задач подходит минипогрузчик?', 'Уборка территории, погрузка сыпучих материалов, работа в стеснённых условиях, куда крупная техника не заедет. С навесным — вилы, отвал, бур, молот, щётка.'],
         ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 22%.'],
       ],
     },
     {
-      key: 'samosvaly', title: 'Самосвалы', img: 'images/samosvaly.jpg',
+      key: 'samosvaly', title: 'Самосвалы', img: 'images/samosvaly.jpg', priceCats: ['samosvaly'],
       desc: 'Вывоз грунта и строительного мусора, доставка сыпучих материалов на объект.',
-      models: [
-        ['Аренда самосвалов (кузов 20 м³)', '20 000 ₽', '—'],
-        ['КАМАЗ 65115 (полноприводный, 15 т, 10 м³)', '20 000 ₽', '—'],
-        ['Самосвал-вездеход УРАЛ (12 т, 12 м³)', '22 000 ₽', '—'],
-      ],
       faq: [
-        ['Какой объём вывозит самосвал за рейс?', 'От 10 до 20 м³ в зависимости от модели — смотрите объём кузова в прайс-листе.'],
+        ['Какой объём вывозит самосвал за рейс?', '10 или 20 м³ в зависимости от машины — смотрите объём кузова в прайс-листе.'],
         ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 22%.'],
       ],
     },
     {
-      key: 'manipulyator', title: 'Кран-манипулятор', img: 'images/manipulyator.jpg',
+      key: 'manipulyator', title: 'Кран-манипулятор', img: 'images/manipulyator.jpg', priceCats: ['manipulyatory'],
       desc: 'Перевозка и погрузка/разгрузка стройматериалов, труб, плит и оборудования одной машиной — не нужно заказывать грузовик и кран отдельно.',
-      models: [
-        ['Кран-манипулятор 7 т, стрела 3–5 т', '20 000 ₽ / 19 000 ₽', '—'],
-      ],
       faq: [
         ['Чем кран-манипулятор лучше обычного грузовика?', 'Одна машина одновременно перевозит и грузит/разгружает материалы — не нужно заказывать грузовик и кран по отдельности.'],
         ['Что входит в стоимость?', 'Цена указана за одну машиносмену при 8-часовом режиме работы, с учётом НДС 22%.'],
       ],
     },
   ];
+  categories.forEach((c) => {
+    const cats = window.PRICE_LIST.filter((p) => c.priceCats.includes(p.key));
+    c.models = cats.flatMap((p) => p.items).filter((m) => !c.match || c.match.test(m.name));
+    c.formChips = cats.map((p) => p.title);
+  });
+
+  const NBSP = ' ';
+  function money(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, NBSP) + NBSP + '₽'; }
+  function shiftText(m) {
+    if (m.shift === null || m.shift === undefined) return 'по запросу';
+    return typeof m.shift === 'number' ? money(m.shift) : m.shift;
+  }
+  function deliveryText(m) {
+    if (m.delivery === null || m.delivery === undefined) return '—';
+    return typeof m.delivery === 'number' ? `${money(m.delivery)}/км` : m.delivery;
+  }
 
   const track = document.getElementById('marqueeTrack');
   function renderCards() {
@@ -779,21 +789,21 @@
         <img src="${c.img}" alt="${c.title}" loading="lazy">
         <div class="card-body">
           <h3>${c.title}</h3>
-          <div class="price-hint">от ${minPrice(c)} ₽/смена</div>
+          <div class="price-hint">${minPrice(c)}</div>
           <div class="count">${c.models.length} ${plural(c.models.length)}</div>
         </div>
       </div>
     `).join('');
   }
   function minPrice(c) {
-    const nums = c.models.map(m => parseInt(m[1].replace(/\D/g, '').slice(0, 5)) || Infinity);
-    return Math.min(...nums).toLocaleString('ru-RU');
+    const nums = c.models.filter(m => !m.service).map(m => m.shift).filter(v => typeof v === 'number');
+    return nums.length ? `от ${money(Math.min(...nums))}/смена` : 'цена по запросу';
   }
   function plural(n) {
     const f = n % 10, s = n % 100;
-    if (f === 1 && s !== 11) return 'модель';
-    if ([2,3,4].includes(f) && ![12,13,14].includes(s)) return 'модели';
-    return 'моделей';
+    if (f === 1 && s !== 11) return 'позиция';
+    if ([2,3,4].includes(f) && ![12,13,14].includes(s)) return 'позиции';
+    return 'позиций';
   }
   renderCards();
 
@@ -874,17 +884,23 @@
   const modalModels = document.getElementById('modalModels');
   const modalFaq = document.getElementById('modalFaq');
 
-  let currentCategoryTitle = '';
+  let currentFormChips = [];
   function openModal(key) {
     const c = categories.find(x => x.key === key);
     if (!c) return;
-    currentCategoryTitle = c.title;
+    currentFormChips = c.formChips;
     modalImg.src = c.img;
     modalImg.alt = c.title;
     modalTitle.textContent = c.title;
+    document.getElementById('modalPriceLink').href = `price.html?cat=${c.priceCats[0]}`;
     modalDesc.textContent = c.desc;
     modalModels.innerHTML = c.models.map(m => `
-      <tr><td>${m[0]}</td><td class="price">${m[1]}</td><td class="delivery">${m[2]}</td></tr>
+      <tr>
+        <td>${m.name}${m.specs ? `<div class="spec">${m.specs}</div>` : ''}</td>
+        <td class="price">${shiftText(m)}</td>
+        <td class="price-hour">${typeof m.hour === 'number' ? money(m.hour) : '—'}</td>
+        <td class="delivery">${deliveryText(m)}</td>
+      </tr>
     `).join('');
     modalFaq.innerHTML = c.faq.map(f => `
       <div class="faq-item"><div class="faq-q">${f[0]}</div><p class="faq-a">${f[1]}</p></div>
@@ -918,12 +934,16 @@
   const leadSubmit = document.getElementById('leadSubmit');
   const techChips = document.getElementById('techChips');
   const techChipsError = document.getElementById('techChipsError');
+  // Equipment chips in the form follow the price list categories
+  techChips.innerHTML = window.PRICE_LIST.map(c => c.title).concat('Не знаю, нужна консультация').map(t => `
+    <label class="tech-chip"><input type="checkbox" value="${t}"><span>${t}</span></label>
+  `).join('');
   const techChipInputs = Array.from(techChips.querySelectorAll('input[type="checkbox"]'));
 
   function openLeadModal(prefill) {
     leadStatus.textContent = '';
     leadStatus.className = 'lead-status';
-    techChipInputs.forEach(cb => { cb.checked = prefill ? cb.value === prefill : false; });
+    techChipInputs.forEach(cb => { cb.checked = prefill.includes(cb.value); });
     techChipsError.classList.remove('show');
     leadOverlay.classList.add('open');
     lenis.stop();
@@ -933,10 +953,10 @@
     leadOverlay.classList.remove('open');
     lenis.start();
   }
-  document.getElementById('fabLead').addEventListener('click', () => openLeadModal(''));
+  document.getElementById('fabLead').addEventListener('click', () => openLeadModal([]));
   document.getElementById('modalLeadBtn').addEventListener('click', () => {
     closeModal();
-    openLeadModal(currentCategoryTitle);
+    openLeadModal(currentFormChips);
   });
   document.getElementById('leadClose').addEventListener('click', closeLeadModal);
   leadOverlay.addEventListener('click', (e) => { if (e.target === leadOverlay) closeLeadModal(); });
