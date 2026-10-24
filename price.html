@@ -9,7 +9,11 @@
 <meta property="og:description" content="Цены на аренду спецтехники с НДС 22%. Минимальный заказ — 8 часов." />
 <meta property="og:image" content="images/ceo-portrait.jpg" />
 <meta property="og:type" content="website" />
-<link rel="icon" href="images/logo-icon.png" />
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="120x120" href="/favicon-120.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -49,16 +53,7 @@
     border-bottom: 1px solid var(--border);
   }
   .logo-group { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--ink); }
-  .logo-video {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    object-fit: cover;
-    background: #17172a;
-    box-shadow: var(--shadow);
-    display: block;
-    flex: 0 0 auto;
-  }
+  .logo-mark { width: 44px; height: 44px; display: block; flex: 0 0 auto; }
   .brand { font-weight: 800; font-size: 20px; letter-spacing: 0.5px; line-height: 1; }
   .brand span { display: block; }
   .brand .stroy { color: var(--accent-dark); }
@@ -344,7 +339,6 @@
   /* Mobile: table turns into cards */
   @media (max-width: 760px) {
     header { padding-top: 14px; padding-bottom: 14px; }
-    .logo-video { width: 44px; height: 44px; border-radius: 12px; }
     .brand { font-size: 17px; }
     .logo-group { gap: 10px; }
     .site-nav a { padding: 8px 12px; font-size: 13px; }
@@ -402,7 +396,7 @@
 
 <header>
   <a class="logo-group" href="index.html" aria-label="Mazay Stroy — на главную">
-    <video class="logo-video" src="images/logo-mark.mp4" autoplay muted playsinline poster="images/logo-icon.png"></video>
+    <img class="logo-mark" src="favicon.svg" width="44" height="44" alt="">
     <div class="brand">
       <span>MAZAY</span>
       <span class="stroy">STROY</span>

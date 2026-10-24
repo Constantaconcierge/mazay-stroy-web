@@ -10,7 +10,11 @@
 <meta property="og:image" content="images/ceo-portrait.jpg" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="icon" href="images/logo-icon.png" />
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="120x120" href="/favicon-120.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -49,15 +53,21 @@
     border-bottom: 1px solid var(--border);
   }
   .logo-group { display: flex; align-items: center; gap: 14px; }
-  .logo-slot { width: 52px; height: 52px; flex: 0 0 auto; }
+  .logo-slot { width: 44px; height: 44px; flex: 0 0 auto; position: relative; }
+  .logo-mark { width: 44px; height: 44px; display: block; transition: opacity 0.35s ease; }
+  /* Header mark stays hidden while the intro video is flying into its place */
+  .logo-slot.intro-pending .logo-mark { opacity: 0; }
   .logo-video {
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
     object-fit: cover;
     background: #17172a;
-    box-shadow: var(--shadow);
     display: block;
+    transition: opacity 0.35s ease;
   }
   .brand { font-weight: 800; font-size: 20px; letter-spacing: 0.5px; line-height: 1; }
   .brand span { display: block; }
@@ -439,13 +449,52 @@
     header { gap: 12px; }
     .site-nav a { padding: 8px 12px; font-size: 13px; }
   }
+
+  /* Floating button steps aside while the «Полный прайс-лист» button is under it (see JS) */
+  .fab-lead { transition: opacity 0.2s ease, transform 0.2s ease; }
+  .fab-lead.fab-hidden { opacity: 0; transform: translateY(12px); pointer-events: none; }
+
+  /* Mobile: categories become a native swipe row with snap; the JS marquee is off at this width */
+  @media (max-width: 768px) {
+    header { padding-left: 20px; padding-right: 20px; }
+    .site-nav { flex-shrink: 0; }
+    .hero { padding-top: 76px; }
+    .marquee-section { padding-top: 8px; }
+    .marquee-track {
+      width: auto;
+      gap: 12px;
+      padding: 4px 16px 18px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 16px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      touch-action: auto;
+      cursor: auto;
+      user-select: auto;
+      will-change: auto;
+      transform: none !important;
+    }
+    .marquee-track::-webkit-scrollbar { display: none; }
+    .card { width: clamp(220px, 62vw, 240px); scroll-snap-align: start; border-radius: 16px; }
+    .card:hover { transform: none; }
+    .card img { height: auto; aspect-ratio: 16 / 10; }
+    .card-body { padding: 11px 12px 13px; }
+    .card-body h3 { font-size: 17px; margin-bottom: 4px; }
+    .card-body .price-hint { font-size: 14px; }
+    .card-body .count { font-size: 13px; margin-top: 2px; }
+    .marquee-more { margin-top: 16px; }
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo-group">
-    <div class="logo-slot" id="logoSlot"></div>
+    <div class="logo-slot intro-pending" id="logoSlot">
+      <img class="logo-mark" src="favicon.svg" width="44" height="44" alt="Mazay Stroy">
+    </div>
     <div class="brand">
       <span>MAZAY</span>
       <span class="stroy">STROY</span>
@@ -685,13 +734,22 @@
       introLogo.style.transition = 'transform 0.85s cubic-bezier(0.65,0,0.35,1)';
       introLogo.style.transform = 'none';
     });
-    introLogo.addEventListener('transitionend', () => {
+    let landed = false;
+    function land() {
+      if (landed) return;
+      landed = true;
       introLogo.style.transition = '';
       introLogo.style.transform = '';
       introLogo.style.transformOrigin = '';
       const wrap = document.getElementById('introLogoWrap');
       if (wrap) wrap.remove();
-    }, { once: true });
+      // Hand over to the static header mark (white M on graphite) — the video's last frame is too dark there
+      slot.classList.remove('intro-pending');
+      introLogo.style.opacity = '0';
+      setTimeout(() => introLogo.remove(), 400);
+    }
+    introLogo.addEventListener('transitionend', land, { once: true });
+    setTimeout(land, 1200); // fallback if transitionend doesn't fire (background tab, etc.)
   }
   introLogo.addEventListener('ended', flyLogoToHeader);
   setTimeout(flyLogoToHeader, 3600); // fallback if 'ended' doesn't fire (autoplay blocked, etc.)
@@ -782,8 +840,10 @@
   }
 
   const track = document.getElementById('marqueeTrack');
+  // ≤768px: native swipe row with scroll-snap (CSS), no auto-scroll and no duplicated cards
+  const mqMobile = window.matchMedia('(max-width: 768px)');
   function renderCards() {
-    const list = [...categories, ...categories]; // duplicate for seamless loop
+    const list = mqMobile.matches ? categories : [...categories, ...categories]; // duplicate for seamless loop
     track.innerHTML = list.map((c, i) => `
       <div class="card" data-key="${c.key}">
         <img src="${c.img}" alt="${c.title}" loading="lazy">
@@ -831,7 +891,7 @@
     const dt = time - mqLastTime;
     mqLastTime = time;
     // Skip work entirely while the marquee is scrolled out of view (keeps scroll smooth elsewhere on the page)
-    if (mqInView) {
+    if (mqInView && !mqMobile.matches) {
       if (!mqDragging && !mqHovering) {
         mqOffset = mqWrap(mqOffset + MQ_SPEED * dt);
       }
@@ -848,6 +908,13 @@
     }, { threshold: 0 }).observe(track);
   }
   window.addEventListener('resize', mqUpdateWidth);
+  mqMobile.addEventListener('change', () => {
+    renderCards();
+    mqOffset = 0;
+    track.style.transform = '';
+    track.scrollLeft = 0;
+    mqUpdateWidth();
+  });
 
   function mqOnPointerMove(e) {
     if (!mqDragging) return;
@@ -864,6 +931,7 @@
   }
   track.addEventListener('pointerdown', (e) => {
     if (e.button !== undefined && e.button !== 0) return; // left click / touch / pen only
+    if (mqMobile.matches) return; // native horizontal scroll handles swipes on mobile
     mqDragging = true;
     mqDragMoved = 0;
     mqStartX = e.clientX;
@@ -954,6 +1022,28 @@
     lenis.start();
   }
   document.getElementById('fabLead').addEventListener('click', () => openLeadModal([]));
+
+  // Hide the floating button while «Полный прайс-лист» passes under it, so the two never overlap
+  const fabLead = document.getElementById('fabLead');
+  const priceMoreBtn = document.querySelector('.marquee-more a');
+  let fabQueued = false;
+  function updateFab() {
+    fabQueued = false;
+    const cs = getComputedStyle(fabLead);
+    // FAB box from its fixed offsets (offsetWidth/Height ignore the hide transform)
+    const fabTop = window.innerHeight - parseFloat(cs.bottom) - fabLead.offsetHeight;
+    const fabLeft = window.innerWidth - parseFloat(cs.right) - fabLead.offsetWidth;
+    const r = priceMoreBtn.getBoundingClientRect();
+    const hit = r.bottom > fabTop - 8 && r.top < window.innerHeight && r.right > fabLeft - 8;
+    fabLead.classList.toggle('fab-hidden', hit);
+  }
+  function queueFab() {
+    if (!fabQueued) { fabQueued = true; requestAnimationFrame(updateFab); }
+  }
+  window.addEventListener('scroll', queueFab, { passive: true });
+  window.addEventListener('resize', queueFab);
+  if ('ResizeObserver' in window) new ResizeObserver(queueFab).observe(document.body); // intro logo leaving shifts the layout
+  queueFab();
   document.getElementById('modalLeadBtn').addEventListener('click', () => {
     closeModal();
     openLeadModal(currentFormChips);
